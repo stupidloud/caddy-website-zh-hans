@@ -1,8 +1,6 @@
-const moduleDocsPathPrefix = "/docs/modules/";
-
-if (window.location.pathname == moduleDocsPathPrefix.slice(0, -1) 
-	|| window.location.pathname.startsWith(moduleDocsPathPrefix)) {
-	let moduleID = window.location.pathname.slice(moduleDocsPathPrefix.length);
+if (getDocsPathname() == "/docs/modules"
+	|| getDocsPathname().startsWith("/docs/modules/")) {
+	let moduleID = getDocsPathname().slice("/docs/modules/".length);
 	if (moduleID) {
 		// update page title and load the docs for these modules (possibly more than 1 with this ID)
 		document.title = `Module ${moduleID} - Caddy Documentation`;

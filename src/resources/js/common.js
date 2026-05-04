@@ -45,6 +45,47 @@ function next(el, selector) {
 	return null;
 }
 
+// SITE_LOCALES defines all supported UI locales.
+// To add a new locale, append an entry here.
+const SITE_LOCALES = [
+	{ prefix: '',         label: 'English' },
+	{ prefix: '/zh-hans', label: '中文' },
+];
+
+function getDocsLocalePrefix() {
+	const path = window.location.pathname;
+	return SITE_LOCALES.find(l => l.prefix && path.startsWith(l.prefix + '/'))?.prefix ?? '';
+}
+
+function getDocsPathname() {
+	const prefix = getDocsLocalePrefix();
+	return prefix ? window.location.pathname.slice(prefix.length) : window.location.pathname;
+}
+
+function getDocsMarkdownRoot() {
+	const prefix = getDocsLocalePrefix();
+	return prefix ? `/i18n${prefix}/docs/markdown` : '/docs/markdown';
+}
+
+function localizeDocsHref(href) {
+	const prefix = getDocsLocalePrefix();
+	if (!prefix || !href || !href.startsWith('/docs')) {
+		return href;
+	}
+	return `${prefix}${href}`;
+}
+
+function localizeDocsLinks(root = document) {
+	const prefix = getDocsLocalePrefix();
+	if (!prefix) {
+		return;
+	}
+
+	root.querySelectorAll('a[href^="/docs"]:not(#lang-switcher)').forEach(link => {
+		link.setAttribute('href', localizeDocsHref(link.getAttribute('href')));
+	});
+}
+
 // cloneTemplate does a deep clone of the <template> tag selected by tplSelector.
 function cloneTemplate(tplSelector) {
 	// Ohhhhhh wow, we need to use firstElementChild when cloning the content of a template tag (!!!!):
@@ -171,8 +212,27 @@ function nextTheme() {
 // immediately set the configured theme to avoid flash
 setTheme(getTheme());
 
+// initLangSwitcher sets up the language switcher in the topbar.
+function initLangSwitcher() {
+	const switcher = $_('#lang-switcher');
+	const label = $_('#lang-switcher-label');
+	if (!switcher || !label) return;
 
- 
+	const path = window.location.pathname;
+	const currentPrefix = SITE_LOCALES.find(l => l.prefix && path.startsWith(l.prefix))?.prefix ?? '';
+	const currentIdx = SITE_LOCALES.findIndex(l => l.prefix === currentPrefix);
+	const nextLocale = SITE_LOCALES[(currentIdx + 1) % SITE_LOCALES.length];
+	const pathWithoutPrefix = currentPrefix ? path.slice(currentPrefix.length) : path;
+
+	label.textContent = nextLocale.label;
+	if (pathWithoutPrefix === '/') {
+		switcher.href = nextLocale.prefix ? `${nextLocale.prefix}/docs/` : '/';
+		return;
+	}
+	switcher.href = nextLocale.prefix + pathWithoutPrefix;
+}
+
+ready(initLangSwitcher);
 
 // hoversplash effect!
 on('mouseenter', '.button:not(.cool):not(.button *), button:not(.cool):not(button *)', (e) => {
@@ -213,5 +273,15 @@ ready(function() {
 		apiKey: '1ab8d12c0f99de6c4a04401c9f315c2e',
 		indexName: 'caddyserver',
 		container: '#search',
+		transformItems: function(items) {
+			return items.map(function(item) {
+				item.url = item.url.replace('https://caddyserver.com', window.location.origin);
+				return item;
+			});
+		},
 	});
+});
+
+ready(function() {
+	localizeDocsLinks();
 });
