@@ -1,13 +1,16 @@
 ready(function() {
+	const docsPathname = getDocsPathname();
+	const docsPrefix = getDocsLocalePrefix();
+
 	// highlight current page in left nav
-	let currentPageLink = $_('main nav a[href="'+window.location.pathname+'"]');
-	if (window.location.pathname.startsWith("/docs/json/")) {
+	let currentPageLink = $_(`main nav a[href="${window.location.pathname}"]`);
+	if (docsPathname.startsWith("/docs/json/")) {
 		// as a special case, highlight the JSON structure link anywhere within it
-		currentPageLink = $_('main nav a[href="/docs/json"]');
+		currentPageLink = $_(`main nav a[href="${docsPrefix}/docs/json"]`);
 	}
-	if (window.location.pathname.startsWith("/docs/modules/")) {
+	if (docsPathname.startsWith("/docs/modules/")) {
 		// as another special case, highlight the modules link anywhere within it
-		currentPageLink = $_('main nav a[href="/docs/modules"]');
+		currentPageLink = $_(`main nav a[href="${docsPrefix}/docs/modules"]`);
 	}
 	currentPageLink?.classList?.add('current');
 
@@ -111,19 +114,28 @@ ready(function() {
 
 		// transform user-facing URL to direct link to markdown file for the hover submenu
 		let href = e.target.getAttribute('href');
+		if (docsPrefix && href.startsWith(docsPrefix)) {
+			href = href.slice(docsPrefix.length);
+		}
 		const trimPrefix = "/docs/";
 		if (href.startsWith(trimPrefix)) {
 			href = href.slice(trimPrefix.length);
 		}
 
-		const response = await fetch(`/docs/markdown/${href}.md`);
+		if (!href) {
+			href = 'index';
+		}
+
+		const response = await fetch(`${getDocsMarkdownRoot()}/${href}.md`);
 		const markdown = await response.text();
 		const tokens = marked.lexer(markdown);
+		const tocAnchors = extractSectionAnchors(markdown);
 
 		// empty the container
 		autonav.replaceChildren();
 		
 		let seenH1 = false;
+		let sectionIndex = 0;
 		for (const tkn of tokens) {
 			if (tkn.type != "heading") continue;
 			if (tkn.depth == 1) {
@@ -133,7 +145,8 @@ ready(function() {
 
 			// this includes HTML entities like &lt; (i.e. not user-facing text), but
 			// that's how the server-side markdown renderer does it too ¯\_(ツ)_/¯
-			const anchor = anchorID(tkn.text);
+			const anchor = tocAnchors[sectionIndex] || anchorID(tkn.text);
+			sectionIndex += 1;
 
 			const a = document.createElement('a');
 			a.classList.add('autonav-link');
@@ -187,6 +200,37 @@ function addLinksToSubdirectives() {
 			item.innerHTML = `<a href="${url}" style="color: inherit;" title="${text}">${text}</a>`;
 		}
 	});
+}
+
+function extractSectionAnchors(markdown) {
+	const tokens = marked.lexer(markdown);
+	for (const token of tokens) {
+		if (token.type === "heading") {
+			break;
+		}
+		if (token.type !== "list" || !token.raw) {
+			continue;
+		}
+
+		const anchorIds = [];
+		const seen = new Set();
+		for (const match of token.raw.matchAll(/href="#([^"]+)"/g)) {
+			if (seen.has(match[1])) {
+				continue;
+			}
+			seen.add(match[1]);
+			anchorIds.push(match[1]);
+		}
+		for (const match of token.raw.matchAll(/\]\(#([^)]+)\)/g)) {
+			if (seen.has(match[1])) {
+				continue;
+			}
+			seen.add(match[1]);
+			anchorIds.push(match[1]);
+		}
+		return anchorIds;
+	}
+	return [];
 }
 
 // toggle left-nav when menu link is clicked
@@ -243,4 +287,3 @@ function splitTypeName(fqtn) {
 function stripScheme(url) {
 	return url.substring(url.indexOf("://")+3);
 }
-

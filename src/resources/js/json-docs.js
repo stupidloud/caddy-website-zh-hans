@@ -1,10 +1,10 @@
-const jsonDocsPathPrefix = "/docs/json/";
+const jsonDocsPathPrefix = `${getDocsLocalePrefix()}/docs/json/`;
 
-var configPath = window.location.pathname.slice(jsonDocsPathPrefix.length);
+var configPath = getDocsPathname().slice("/docs/json/".length);
 var pathComponents = configPath.split('/');
 
-if (window.location.pathname == jsonDocsPathPrefix.slice(0, -1) 
-	|| window.location.pathname.startsWith(jsonDocsPathPrefix)) {
+if (getDocsPathname() == "/docs/json"
+	|| getDocsPathname().startsWith("/docs/json/")) {
 	setPageTitle();
 	
 	// load the docs for this path

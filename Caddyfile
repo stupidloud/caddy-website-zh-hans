@@ -1,8 +1,10 @@
-localhost
+:{$PORT:8080}
 
 root src
 
-file_server
+file_server {
+	disable_canonical_uris
+}
 templates {
 	extensions {
 		# Uncomment this if you have the caddy-hitcounter plugin (https://github.com/mholt/caddy-hitcounter):
@@ -14,17 +16,24 @@ templates {
 }
 encode zstd gzip
 
-try_files {path}.html {path}
+rewrite / /docs/index.html
+
+@officialSite path_regexp officialSite ^/(features|download|account|support|sponsor)(/.*)?$
+redir @officialSite https://caddyserver.com{uri} 302
 
 # allow direct access to markdown but otherwise
 # rewrite to docs index page to render it
+# matches /docs/* and /{locale}/docs/* for any locale
 @notDirectDocsMarkdown {
-	path /docs/*
+	path_regexp ^(/[a-z][a-z-]*)?/docs/
 	not path *.md
+	not path /api/*
 }
 rewrite @notDirectDocsMarkdown /docs/index.html
 
 redir /docs/caddyfile/directives/basicauth /docs/caddyfile/directives/basic_auth 308
 redir /docs/caddyfile/directives/skip_log /docs/caddyfile/directives/log_skip 308
 
-reverse_proxy /api/* localhost:4444
+reverse_proxy /api/* https://caddyserver.com {
+	header_up Host caddyserver.com
+}
