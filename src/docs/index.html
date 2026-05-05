@@ -3,6 +3,9 @@
 {{if hasPrefix "/zh-hans/" .OriginalReq.URL.Path -}}
 	{{$locale = "zh-hans" -}}
 	{{$htmlLang = "zh-Hans" -}}
+{{else if hasPrefix "/ja/" .OriginalReq.URL.Path -}}
+	{{$locale = "ja" -}}
+	{{$htmlLang = "ja" -}}
 {{end -}}
 {{$docsPath := trimPrefix "/docs/" .OriginalReq.URL.Path -}}
 {{if $locale -}}

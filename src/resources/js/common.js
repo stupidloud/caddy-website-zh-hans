@@ -50,6 +50,7 @@ function next(el, selector) {
 const SITE_LOCALES = [
 	{ prefix: '',         label: 'English' },
 	{ prefix: '/zh-hans', label: '中文' },
+	{ prefix: '/ja',      label: '日本語' },
 ];
 
 function getDocsLocalePrefix() {
