@@ -249,6 +249,26 @@ Windows で Caddy をサービスとして実行する方法は 2 つありま�
 
 `WinSW-x64.exe` ファイルの名前を `caddy-service.exe` に変更します。
 
+同じディレクトリに `caddy-service.xml` を追加します。
+
+```xml
+<service>
+  <id>caddy</id>
+  <!-- Display name of the service -->
+  <name>Caddy Web Server (powered by WinSW)</name>
+  <!-- Service description -->
+  <description>Caddy Web Server (https://caddyserver.com/)</description>
+  <executable>%BASE%\caddy.exe</executable>
+  <arguments>run</arguments>
+  <log mode="roll-by-time">
+    <pattern>yyyy-MM-dd</pattern>
+  </log>
+</service>
+```
+
+次のコマンドでサービスをインストールできます。
+<pre><code class="cmd bash">caddy-service install</code></pre>
+
 Windows Services Console を起動して、サービスが正しく実行されているか確認したくなるかもしれません。
 <pre><code class="cmd bash">services.msc</code></pre>
 

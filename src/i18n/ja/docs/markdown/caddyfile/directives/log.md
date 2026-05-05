@@ -401,6 +401,7 @@ encode 時に、field を指定された文字列で置き換えるよう mark �
 ```
 
 
+<a id="ip-mask"></a>
 ##### ip_mask
 
 CIDR mask を使って field 内の IP address を mask します。つまり、左側から保持する IP の bit 数を指定します。field が文字列の array（例: HTTP headers）の場合、array 内の各値が mask されます。値には、comma separated string の IP address を指定できます。

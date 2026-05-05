@@ -54,7 +54,7 @@ php_fastcgi [<matcher>] <php-fpm_gateways...> {
 
 - **index** <span id="index"/> は、directory index file として扱う filename を指定します。これは[展開形](#expanded-form)内の file matcher に影響します。デフォルト: `index.php`。マッチするファイルが見つからない場合の `index.php` への rewrite fallback を無効にするには、`off` に設定できます。
 
-- **try_files** <span id="try_files"/> は、デフォルトの try-files rewrite の上書きを指定します。詳細は [`try_files` ディレクティブ](try_files)を参照してください。デフォルト: `{path} {path}/index.php index.php`。
+- **try_files** <a id="try_files"></a> は、デフォルトの try-files rewrite の上書きを指定します。詳細は [`try_files` ディレクティブ](try_files)を参照してください。デフォルト: `{path} {path}/index.php index.php`。
 
 - **env** <span id="env"/> は、追加の環境変数を指定された値に設定します。複数の環境変数を設定するため、複数回指定できます。デフォルトでは、関連する FastCGI 環境変数（HTTP header を含む）はすべてすでに設定されていますが、必要に応じて変数を追加または上書きできます。
 

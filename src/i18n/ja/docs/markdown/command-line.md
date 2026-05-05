@@ -111,6 +111,7 @@ caddy <command> [<args...>]
 ## Subcommands
 
 
+<a id="caddy-adapt"></a>
 ### `caddy adapt`
 
 <pre><code class="cmd bash">caddy adapt
@@ -157,6 +158,7 @@ adapt: validation: loading app modules: module name 'tls': provision tls: loadin
 
 
 
+<a id="caddy-build-info"></a>
 ### `caddy build-info`
 
 <pre><code class="cmd bash">caddy build-info</code></pre>
@@ -166,6 +168,7 @@ build について Go が提供する情報（main module path、package version
 
 
 
+<a id="caddy-completion"></a>
 ### `caddy completion`
 
 <pre><code class="cmd bash">caddy completion [bash|zsh|fish|powershell]</code></pre>
@@ -176,6 +179,7 @@ shell completion scripts を生成します。これにより、`caddy` commands
 
 
 
+<a id="caddy-environ"></a>
 ### `caddy environ`
 
 <pre><code class="cmd bash">caddy environ</code></pre>
@@ -185,6 +189,7 @@ caddy から見える environment を出力して終了します。systemd の�
 
 
 
+<a id="caddy-file-server"></a>
 ### `caddy file-server`
 
 <pre><code class="cmd bash">caddy file-server
@@ -227,12 +232,14 @@ caddy から見える environment を出力して終了します。systemd の�
 この command は admin API を無効にするため、ローカル開発マシン上で複数 instances を実行しやすくなります。
 
 
+<a id="caddy-file-server-export-template"></a>
 #### `caddy file-server export-template`
 
 <pre><code class="cmd bash">caddy file-server export-template</code></pre>
 
 default file browsing template を stdout に export します
 
+<a id="caddy-fmt"></a>
 ### `caddy fmt`
 
 <pre><code class="cmd bash">caddy fmt [&lt;path&gt;]
@@ -248,6 +255,7 @@ Caddyfile を format または prettify して終了します。`--overwrite` �
 `--diff` は、output を input と比較し、異なる行に `-` と `+` の prefix を付けます。変更されていない行には alignment のため 2 つの spaces が prefix される点に注意してください。また、これは有効な patch format ではなく、視覚的なツールとして意図されています。
 
 
+<a id="caddy-hash-password"></a>
 ### `caddy hash-password`
 
 <pre><code class="cmd bash">caddy hash-password
@@ -289,6 +297,7 @@ Argon2id-specific parameters:
     resulting hash の byte 長です。長い keys は security を高めますが、storage size もわずかに増えます。
 
 
+<a id="caddy-help"></a>
 ### `caddy help`
 
 <pre><code class="cmd bash">caddy help [&lt;command&gt;]</code></pre>
@@ -297,6 +306,7 @@ CLI help text を出力します。必要に応じて特定の subcommand の he
 
 
 
+<a id="caddy-list-modules"></a>
 ### `caddy list-modules`
 
 <pre><code class="cmd bash">caddy list-modules
@@ -315,6 +325,7 @@ NOTE: [Go のバグ](https://github.com/golang/go/issues/29228) により、vers
 
 
 
+<a id="caddy-manpage"></a>
 ### `caddy manpage`
 
 <pre><code class="cmd bash">caddy manpage
@@ -339,6 +350,7 @@ Manual pages は、私たちの website 上のものとは別の documentation �
 
 
 
+<a id="caddy-reload"></a>
 ### `caddy reload`
 
 <pre><code class="cmd bash">caddy reload
@@ -362,6 +374,7 @@ Manual pages は、私たちの website 上のものとは別の documentation �
 
 
 
+<a id="caddy-respond"></a>
 ### `caddy respond`
 
 <pre><code class="cmd bash">caddy respond
@@ -430,6 +443,7 @@ maintenance page を pipe する:
 
 
 
+<a id="caddy-reverse-proxy"></a>
 ### `caddy reverse-proxy`
 
 <pre><code class="cmd bash">caddy reverse-proxy
@@ -474,6 +488,7 @@ proxying の場合:
 
 
 
+<a id="caddy-run"></a>
 ### `caddy run`
 
 <pre><code class="cmd bash">caddy run
@@ -509,6 +524,7 @@ Caddy を実行し、無期限に block します。つまり "daemon" mode で�
 
 
 
+<a id="caddy-start"></a>
 ### `caddy start`
 
 <pre><code class="cmd bash">caddy start
@@ -528,6 +544,7 @@ Caddy を実行し、無期限に block します。つまり "daemon" mode で�
 
 
 
+<a id="caddy-stop"></a>
 ### `caddy stop`
 
 <pre><code class="cmd bash">caddy stop
@@ -548,6 +565,7 @@ running instance の admin API が default listen address を使っていない�
 process を終了せずに現在の configuration だけを停止したい場合は、blank config で [`caddy reload`](#caddy-reload) を使うか、[`DELETE /config/`](/docs/api#delete-configpath) endpoint を使ってください。
 
 
+<a id="caddy-storage"></a>
 ### `caddy storage`
 
 <i>⚠️ Experimental</i>
@@ -595,6 +613,7 @@ $ caddy storage export -c Caddyfile.old -o- |
 `--input` は読み込む tarball の filename です。`-` の場合、input は stdin から読み込まれます。
 
 
+<a id="caddy-trust"></a>
 ### `caddy trust`
 
 <pre><code class="cmd bash">caddy trust
@@ -613,6 +632,7 @@ Caddy は root certificates が初めて生成されるとき、local trust stor
 admin API が他の machines からアクセスできるようにされている場合、この command と `caddy` binary を使って network 内の他の machines に certificates をインストールすることもできます。ただし、この場合は admin API を untrusted clients に公開しないよう注意してください。
 
 
+<a id="caddy-untrust"></a>
 ### `caddy untrust`
 
 <pre><code class="cmd bash">caddy untrust
@@ -634,6 +654,7 @@ root certificate を local trust store(s) から信頼解除します。
 admin API が使われる場合、CA ID のデフォルトは "local" です。`--ca` flag で別の CA の ID を指定できます。running instance の admin API が default listen address を使っていない場合は、`--address` を明示的に指定するか、`--config` flag を使って config から admin address を読み込めます。
 
 
+<a id="caddy-upgrade"></a>
 ### `caddy upgrade`
 
 <i>⚠️ Experimental</i>
@@ -651,6 +672,7 @@ upgrade process は fault tolerant です。現在の binary は先に backup �
 
 
 
+<a id="caddy-add-package"></a>
 ### `caddy add-package`
 
 <i>⚠️ Experimental</i>
@@ -666,6 +688,7 @@ upgrade process は fault tolerant です。現在の binary は先に backup �
 
 
 
+<a id="caddy-remove-package"></a>
 ### `caddy remove-package`
 
 <i>⚠️ Experimental</i>
@@ -677,6 +700,7 @@ upgrade process は fault tolerant です。現在の binary は先に backup �
 
 
 
+<a id="caddy-validate"></a>
 ### `caddy validate`
 
 <pre><code class="cmd bash">caddy validate
@@ -694,6 +718,7 @@ configuration file を validate して終了します。この command は confi
 
 
 
+<a id="caddy-version"></a>
 ### `caddy version`
 <pre><code class="cmd bash">caddy version</code></pre>
 
