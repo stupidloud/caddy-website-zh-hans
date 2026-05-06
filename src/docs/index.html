@@ -6,6 +6,9 @@
 {{else if hasPrefix "/ja/" .OriginalReq.URL.Path -}}
 	{{$locale = "ja" -}}
 	{{$htmlLang = "ja" -}}
+{{else if hasPrefix "/es/" .OriginalReq.URL.Path -}}
+	{{$locale = "es" -}}
+	{{$htmlLang = "es" -}}
 {{else if hasPrefix "/de/" .OriginalReq.URL.Path -}}
 	{{$locale = "de" -}}
 	{{$htmlLang = "de" -}}
