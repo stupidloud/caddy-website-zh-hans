@@ -1,20 +1,18 @@
 ---
-title: "重写（Caddyfile 指令）"
+title: "rewrite（Caddyfile 指令）"
 ---
 
-# 重写
+# rewrite
 
 在内部重写请求 URI。
 
-重写会更改请求 URI 的部分或全部内容。请注意，URI 不包含协议或主机及端口信息，且客户端通常不会发送片段。因此，该指令主要用于对 **路径** 和 **查询** 字符串进行操作。
+rewrite 会改变请求 URI 的一部分或全部内容。注意，URI 不包含方案和权限信息（host 与 port），客户端通常也不会发送 fragment，因此该指令主要用于**路径**和**查询字符串**改写。
 
-该 `rewrite` 该指令表示有意接受该请求，但需进行修改。
+`rewrite` 表示“接收该请求，但带修改”。
 
-它与其他 `rewrite` 指令互斥，因此可以安全地定义那些原本会相互嵌套的重写规则，因为系统只会执行第一个匹配的重写规则。
+它与同块内其他 `rewrite` 指令互斥，因此即使定义了本可级联执行的重写，也只会执行第一个匹配的 `rewrite`。
 
-一种[请求匹配器](/docs/caddyfile/matchers)，它会在 `rewrite` 可能无法匹配 `rewrite`之后可能无法匹配该请求。若希望您的 `rewrite` 与其他处理程序共享路由，请使用[`route`](route)或[`handle`](handle)指令。
-
-
+在 `rewrite` 前匹配请求的[请求匹配器](/docs/caddyfile/matchers)可能在重写后不再匹配该请求。如果你希望 `rewrite` 与其他处理器处于同一 route，请使用 [`route`](route) 或 [`handle`](handle) 指令。
 
 ## 语法
 
@@ -22,26 +20,22 @@ title: "重写（Caddyfile 指令）"
 rewrite [<matcher>] <to>
 ```
 
-- **&lt;to&gt;** 是请求重写后的目标 URI。仅对重写规则中指定的 URI 组件（路径或查询字符串）进行处理。URI 路径是指位于 `?`之前出现的任何子字符串。如果 `?` 被省略，则整个令牌将被视为路径。
+- **&lt;to&gt;** 是要重写到的目标 URI。重写只会作用于 URI 中显式指定的组件（路径或查询字符串）。URI 路径是 `?` 之前的字符串；若省略 `?`，则整段 token 将被视为路径。
 
-在 v2.8.0 之前， `<to>` 参数若以 `/`，因此必须指定一个通配符匹配器标记（`*`).
+在 v2.8.0 之前，如果 `<to>` 以 `/` 开头，解析器可能会将其误认为是 [匹配器 token](/docs/caddyfile/matchers#syntax)，因此当时需要显式写上通配符匹配器 token（`*`）。
 
+## 类似指令
 
+还存在其他用于改写的指令，但它们表达的意图不同，或是没有完整替换 URI 就实现改写：
 
-## 类似的指令
+- [`uri`](uri) 操作 URI（前缀、后缀或子串替换）。
 
-还有其他一些指令也能执行重写，但它们的意图不同，或者在重写时不会完全替换 URI：
-
-- [`uri`](uri) 用于处理 URI（去除前缀、后缀或替换子字符串）。
-
-- [`try_files`](try_files) 会根据文件的存在情况重写请求。
-
-
+- [`try_files`](try_files) 会根据文件是否存在来重写请求。
 
 
 ## 示例
 
-将所有请求重写为 `index.html`，同时保持查询字符串不变：
+将所有请求改写到 `index.html`，并保持查询字符串不变：
 
 ```caddy
 example.com {
@@ -51,11 +45,11 @@ example.com {
 
 <aside class="tip">
 
-请注意，在 v2.8.0 之前，此处必须使用[通配符匹配器](/docs/caddyfile/matchers#wildcard-matchers)，因为第一个参数与[路径匹配器](/docs/caddyfile/matchers#path-matchers)存在歧义，即 `rewrite * /foo`，但现在可以简化为 `rewrite /foo`.
+注意，在 v2.8.0 之前，这里需要使用 [通配符匹配器](/docs/caddyfile/matchers#wildcard-matchers)，因为第一个参数与 [路径匹配器](/docs/caddyfile/matchers#path-matchers)存在歧义，例如 `rewrite * /foo`，现在可简化为 `rewrite /foo`。
 
 </aside>
 
-在所有请求前添加前缀 `/api`，保留 URI 的其余部分，然后通过反向代理转发至应用程序：
+给所有请求加上 `/api` 前缀，其余 URI 保持不变，再反向代理到应用：
 
 ```caddy
 api.example.com {
@@ -64,7 +58,7 @@ api.example.com {
 }
 ```
 
-将 API 请求中的查询字符串替换为 `a=b`，同时保持路径不变：
+将 API 请求的查询字符串替换为 `a=b`，并保持路径不变：
 
 ```caddy
 example.com {
@@ -72,7 +66,7 @@ example.com {
 }
 ```
 
-仅针对对 `/api/`，请保留现有的查询字符串并添加一个键值对：
+只对 `/api/` 的请求保留原查询字符串并新增一个键值对：
 
 ```caddy
 example.com {
@@ -80,7 +74,7 @@ example.com {
 }
 ```
 
-同时修改路径和查询字符串，在保留原始查询字符串的同时，将原始路径作为 `p` 参数：
+同时改写路径和查询字符串，将原路径作为 `p` 参数保留：
 
 ```caddy
 example.com {

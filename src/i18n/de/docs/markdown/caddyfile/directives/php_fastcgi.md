@@ -54,7 +54,7 @@ php_fastcgi [<matcher>] <php-fpm_gateways...> {
 
 - **index** <span id="index"/> gibt den Dateinamen an, der als Directory-Index-Datei behandelt wird. Dies beeinflusst den File Matcher in der [erweiterten Form](#expanded-form). Standard: `index.php`. Kann auf `off` gesetzt werden, um den Rewrite-Fallback auf `index.php` zu deaktivieren, wenn keine passende Datei gefunden wird.
 
-- **try_files** <a id="try_files"></a> gibt einen Override für den standardmäßigen try-files-Rewrite an. Details finden Sie bei der Direktive [`try_files`](try_files). Standard: `{path} {path}/index.php index.php`.
+- **try_files** <span id="try_files"/> gibt einen Override für den standardmäßigen try-files-Rewrite an. Details finden Sie bei der Direktive [`try_files`](try_files). Standard: `{path} {path}/index.php index.php`.
 
 - **env** <span id="env"/> setzt eine zusätzliche Umgebungsvariable auf den angegebenen Wert. Kann mehrfach für mehrere Umgebungsvariablen angegeben werden. Standardmäßig sind alle relevanten FastCGI-Umgebungsvariablen bereits gesetzt (einschließlich HTTP-Headern), aber Sie können Variablen nach Bedarf hinzufügen oder überschreiben.
 

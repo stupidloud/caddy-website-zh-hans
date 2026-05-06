@@ -21,20 +21,19 @@ ready(function() {
 });
 </script>
 
-# 文件服务器
+# file_server
 
-一个支持真实和虚拟文件系统的静态文件服务器。它通过将请求的 URI 路径附加到[网站的根路径](root)上来构建文件路径。
+一个支持真实文件系统和虚拟文件系统的静态文件服务器。它通过将请求的 URI 路径追加到[站点根路径](root)来构造文件路径。
 
-默认情况下，它会强制执行规范化 URI；这意味着，对于不以尾部斜杠结尾的目录请求（会添加尾部斜杠），或对于以尾部斜杠结尾的文件请求（会移除尾部斜杠），系统将触发 HTTP 重定向。但是，如果内部重写规则修改了路径的最后一个元素（即文件名），则不会触发重定向。
+默认情况下，它会强制标准化 URI；也就是说，对目录请求会发起重定向以补齐末尾斜杠，对带有末尾斜杠的文件请求会重定向去掉该斜杠。但如果内部重写修改了路径的最后一个元素（文件名），则不再触发这些重定向。
 
-通常情况下，`file_server` 指令会与[`root`](root)指令配合使用，以设置整个站点的文件根目录。该指令还提供了一个 `root` 子指令（见下文），用于仅为该处理程序设置根目录（不建议使用）。请注意，站点根目录并不具备沙箱保障：文件服务器虽会阻止通过路径组件进行目录遍历，但根目录内的符号链接仍可能允许访问根目录之外的内容。
+`file_server` 指令通常与 [`root`](root) 指令配合使用，用于为整个站点设置文件根目录。本指令也有一个 `root` 子指令（见下文），仅对该处理器生效（不推荐）。需要注意，站点根目录并不提供沙箱级别的安全保障：文件服务器会阻止路径组件中的目录穿越，但根目录内的符号链接仍可能允许访问根目录外的路径。
 
-当发生错误时（例如文件未找到 `404`、权限被拒绝 `403`），将调用错误路由。请使用[`handle_errors`](handle_errors)指令来定义错误路由，并显示自定义错误页面。
+当出现错误（例如 404 文件未找到、403 权限不足）时，将触发错误路由。使用 [`handle_errors`](handle_errors) 指令可定义错误路由，并展示自定义错误页。
 
-使用 `browse` 时，默认输出由 HTML 模板生成。客户端可通过使用 `Accept: application/json` 或 `Accept: text/plain` 请求头分别请求目录列表的 JSON 或纯文本格式。JSON 输出适用于脚本编写，而纯文本输出则适用于终端的人工操作。
+当使用 `browse` 时，默认输出由 HTML 模板生成。客户端可通过请求头 `Accept: application/json` 或 `Accept: text/plain` 分别以 JSON 或纯文本获取目录列表。JSON 输出适合脚本处理，纯文本输出更适合在终端人工查看。
 
-
-## 语法
+## Syntax
 
 ```caddy-d
 file_server [<matcher>] [browse] {
@@ -54,58 +53,58 @@ file_server [<matcher>] [browse] {
 }
 ```
 
-- **fs**  指定要使用的备用（可能是虚拟）文件系统。 `caddy.fs` 命名空间中的任何 Caddy 模块均可在此处使用。任何根路径/前缀仍适用于替代文件系统模块。默认情况下，使用本地磁盘。
+- **fs** <span id="fs"/> 指定要使用的替代（可能是虚拟）文件系统。此处可使用 `caddy.fs` 命名空间中的任意 Caddy 模块。根路径/前缀仍会应用到替代文件系统模块。默认使用本地磁盘。
 
-	[`xcaddy`](/docs/build#xcaddy) v0.4.0 引入了 [`--embed` 标志](https://github.com/caddyserver/xcaddy#custom-builds)，用于将文件系统树嵌入自定义的 Caddy 构建中，并注册了一个名为 `embedded` 的 `fs` 模块，可让您的静态网站以 Caddy 可执行程序的形式进行分发。
+	[`xcaddy`](/docs/build#xcaddy) v0.4.0 引入了 [`--embed` 标志](https://github.com/caddyserver/xcaddy#custom-builds)，用于将文件系统树内嵌到自定义 Caddy 构建中，并注册了名为 `embedded` 的 `fs` 模块，使你的静态站点可以作为 Caddy 可执行文件分发。
 
-- **root**  用于设置网站根目录的路径。它与 [`root`](root) 指令类似，但仅适用于当前文件服务器实例，并会覆盖任何已定义的其他网站根目录。默认值： `{http.vars.root}` 或当前工作目录。注意：此子指令仅更改当前处理程序的根目录。若要使其他指令（如 [`try_files`](try_files) 或 [`templates`](templates)）使用相同的站点根目录，请改用 [`root`](root) 指令。
+- **root** <span id="root"/> 设置站点根路径。它与 [`root`](root) 指令类似，但只作用于该 file_server 实例，并会覆盖可能已定义的其他站点根。默认值：`{http.vars.root}` 或当前工作目录。注意：该子指令仅修改此处理器的根路径。若要让其他指令（如 [`try_files`](try_files) 或 [`templates`](templates)）共享同一站点根，请改用 [`root`](root) 指令。
 
-- **hide**  是一个待隐藏的文件或文件夹列表；如果有请求匹配这些路径，文件服务器会假装它们不存在。支持占位符和通配符模式。请注意，这些是 *文件系统* 路径，而非请求路径。换句话说，相对路径以当前工作目录为基准，而不是站点根目录；并且在比较之前，所有路径都会尽可能转换为绝对路径。若指定文件名或模式时不包含路径分隔符，则会隐藏所有名称匹配的文件，无论其位置如何；否则，会先尝试路径前缀匹配，再进行通配符匹配。由于这是 Caddyfile 配置，当前有效的配置文件会默认加入。隐藏比较区分大小写；在不区分大小写的文件系统上，大小写不同的请求路径仍可能解析为同一磁盘路径，因此 `hide` 不应被视为敏感路径的安全边界。
+- **hide** <span id="hide"/> 是一组要隐藏的文件或文件夹；在请求这些路径时，文件服务器会伪装成它们不存在。支持占位符和 glob 模式。注意这里使用的是*文件系统路径*，不是请求路径。也就是说，未带路径分隔符的相对路径以当前工作目录为基准，而不是站点根；并且在比较前会先将路径转换为绝对路径（若可转换）。提供仅包含文件名或模式时，会隐藏所有同名文件；否则会先尝试路径前缀匹配，再尝试 glob 匹配。由于这是 Caddyfile 配置，默认会把活动配置文件路径也加入隐藏项。隐藏比较是区分大小写的；在大小写不敏感的文件系统上，不同大小写的请求路径可能仍映射到同一实际路径，因此 `hide` 不应被当作敏感路径的安全边界。
 
-- **index**  是一份用于查找索引文件的文件名列表。默认值： `index.html index.txt`
+- **index** <span id="index"/> 是要查找为索引文件的文件名列表。默认值：`index.html index.txt`
 
-- **浏览**  可在请求未设置索引文件的目录时显示文件列表。
+- **browse** <span id="browse"/> 为没有索引文件的目录请求启用目录列表。
 
-  - **<template_file>**  是一个用于目录列表的可选自定义模板文件。默认使用可通过以下命令提取的模板 `caddy file-server export-template`，该命令将默认模板输出到标准输出。该嵌入式模板也可[在此处](/old/resources/images/external-link.svg)查看[源代码 ![外部链接](/old/resources/images/external-link.svg)](https://github.com/caddyserver/caddy/blob/master/modules/caddyhttp/fileserver/browse.html)。浏览模板还可以使用[标准模板模块](/docs/modules/http.handlers.templates#docs)中的操作。
+  - **<template_file>** <span id="template_file"/> 可选的自定义模板文件，用于目录列表。默认模板可通过 `caddy file-server export-template` 命令导出，该命令会将默认模板输出到标准输出。你也可以在源码中找到嵌入模板 [（GitHub 源码） ![external link](/old/resources/images/external-link.svg)](https://github.com/caddyserver/caddy/blob/master/modules/caddyhttp/fileserver/browse.html)。目录列表模板也可使用[标准模板模块](/docs/modules/http.handlers.templates#docs)的动作。
 
-  - **reveal_symlinks**  可启用在目录列表中显示符号链接目标的功能。默认情况下，符号链接的目标会被隐藏，仅显示链接文件本身。
+  - **reveal_symlinks** <span id="reveal_symlinks"/> 在目录列表中展示符号链接目标。默认情况下，默认隐藏符号链接目标，仅显示链接文件本身。
 
-  - **排序**  可更改目录列表的默认排序方式。第一个参数是用于排序的字段/列： `name`, `namedirfirst`, `size`，或 `time`。第二个参数是可选的排序方向： `asc` 或 `desc`。例如， `sort name desc` 将按名称降序排序。
+  - **sort** <span id="sort"/> 修改目录列表的默认排序。第一个参数为排序字段/列：`name`、`namedirfirst`、`size` 或 `time`。可选的第二参数是方向：`asc` 或 `desc`。例如 `sort name desc` 按名称降序排列。
 
-  - **file_limit**  用于设置目录列表中显示的文件最大数量。默认值： `10000`。如果文件数量超过此限制，则仅显示前 N 个文件，其中 N 为指定的限制值。
+  - **file_limit** <span id="file_limit"/> 设置目录列表中显示文件的最大数量。默认值：`10000`。当文件数量超过该限制时，只显示前 N 个文件（N 为指定值）。
 
-- **precompressed**  是用于搜索预压缩 sidecar 文件的编码格式列表。参数是一个按顺序排列的编码格式列表，用于搜索预压缩 [sidecar 文件](https://en.wikipedia.org/wiki/Sidecar_file)。支持的格式包括 `gzip` (`.gz`)、`zstd` (`.zst`) 和 `br` (`.br`)。若省略格式，则默认使用 `br zstd gzip`（按此顺序）。
+- **precompressed** <span id="precompressed"/> 是用于查找预压缩 sidecar 文件的编码格式列表。参数是要查找的编码格式有序列表，支持 `gzip`（`.gz`）、`zstd`（`.zst`）和 `br`（`.br`）。如果未指定格式，默认顺序是 `br zstd gzip`。
 
-  所有文件查询都会先检查未压缩文件是否存在。一旦找到，Caddy 就会查找与每个启用格式对应扩展名的 sidecar 文件。如果找到了预压缩的 sidecar 文件，Caddy 就会返回该预压缩文件，并相应设置 `Content-Encoding` 响应头。否则，Caddy 会照常返回未压缩的文件。如果启用了[`encode`指令](encode)，则在未预压缩的情况下，它可能会对响应进行即时压缩。
+  所有文件查找会先尝试未压缩文件。一旦找到，Caddy 再按启用格式顺序查找对应的 sidecar 文件。若找到预压缩 sidecar 文件，Caddy 会返回该文件，并设置适当的 `Content-Encoding` 响应头。否则仍按常规返回未压缩文件。如果启用了 [`encode`](encode) 指令，则在没有预压缩文件时可能按需进行压缩。
 
-- **status**  是一个可选的状态码覆盖选项，用于在写入响应时使用。在通过[自定义错误页面](handle_errors)响应请求时特别有用。可以是三位数的状态码，例如： `404`。支持使用占位符。默认情况下，生成的状态码通常为 `200`，或 `206` （用于部分内容）。
+- **status** <span id="status"/> 是写响应时可选的状态码覆盖值。对返回[自定义错误页](handle_errors)很有帮助。可用 3 位状态码，例如：`404`。支持占位符。默认返回的状态码通常是 `200`，或在返回部分内容时是 `206`。
 
-- **disable_canonical_uris**  禁用默认的重定向行为（即当请求路径为目录时添加尾部斜杠，或当请求路径为文件时移除尾部斜杠）。 请注意，默认情况下，如果请求路径的最后一个元素（文件名）经过了内部重写，则不会进行规范化处理，以避免隐式行为覆盖显式重写。
+- **disable_canonical_uris** <span id="disable_canonical_uris"/> 禁用默认的标准化重定向行为（当请求路径为目录但未带末尾斜杠时补齐；当请求路径为文件但带末尾斜杠时移除）。默认情况下，如果请求路径的最后一个元素（文件名）已经经过内部重写，为避免隐式行为覆盖显式重写，也不会执行标准化。
 
-- **pass_thru**  启用直通模式，当请求的文件不存在时，系统会继续处理路由中的下一个 HTTP 处理程序，而不是触发 `404` 错误（调用[`handle_errors`](handle_errors)路由）。实际上，此功能仅在[`route`](route)块内，并且在 `file_server` 后面还有其他处理程序指令时才有用，因为该指令实际上被[排在最后](/docs/caddyfile/directives#directive-order)。
+- **pass_thru** <span id="pass_thru"/> 启用 pass-thru 模式：如果请求的文件不存在，则继续执行路由中的下一个 HTTP 处理器，而不是触发 `404` 错误（调用 [`handle_errors`](handle_errors) 路由）。实际上，这通常只在包含 `file_server` 的 [`route`](route) 块中、并且后面还有其他处理器时才有意义，因为该指令的执行顺序等效于[最后处理](/docs/caddyfile/directives#directive-order)。
 
 
-## 示例
+## Examples
 
-位于当前目录之外的静态文件服务器：
+从当前目录提供静态文件：
 
 ```caddy-d
 file_server
 ```
 
-启用文件列表后：
+开启目录列表：
 
 ```caddy-d
 file_server browse
 ```
 
-仅在 `/static` 文件夹内：
+仅在 `/static` 目录下提供静态文件：
 
 ```caddy-d
 file_server /static/*
 ```
 
-该 `file_server` 该指令通常与[`root`指令](root)配合使用，以设置提供文件的根路径：
+`file_server` 通常与 [`root`](root) 指令一起使用，设置文件服务的根路径：
 
 ```caddy
 example.com {
@@ -116,7 +115,7 @@ example.com {
 
 <aside class="tip">
 
-如果您将 Caddy 作为 systemd 服务运行，从 `/home` 将无法正常工作，因为 `caddy` 用户对 `/home` 目录上没有“可执行”权限（这是目录遍历所必需的）。建议您将文件放置在 `/srv` 或 `/var/www/html` 中。
+如果你将 Caddy 作为 systemd 服务运行，直接从 `/home` 读取文件会失败，因为 `caddy` 用户在 `/home` 目录没有“可执行”权限（这是遍历目录所必需的）。建议改为放在 `/srv` 或 `/var/www/html`。
 
 </aside>
 
@@ -129,7 +128,7 @@ file_server {
 }
 ```
 
-如果客户端支持（`Accept-Encoding` 标头），则会检查请求文件所在目录下是否存在预压缩文件。因此，如果请求 `/path/to/file`，则会检查 `/path/to/file.br`、`/path/to/file.zst` 和 `/path/to/file.gz`，并按顺序提供首个可用的文件，同时附带相应的 `Content-Encoding`：
+若客户端支持（`Accept-Encoding` 头）则会检测请求文件旁边的预压缩文件。例如请求 `/path/to/file` 时，会按顺序检查 `/path/to/file.br`、`/path/to/file.zst` 和 `/path/to/file.gz`，并返回第一个可用文件及其对应的 `Content-Encoding`：
 
 ```caddy-d
 file_server {

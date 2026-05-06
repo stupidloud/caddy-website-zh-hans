@@ -58,8 +58,8 @@ def missing_toc_anchors(raw):
     if not toc_anchors:
         return []
 
-    # 收集文档中已有的显式 <a id="...">
-    defined = set(re.findall(r'<a id="([^"]+)"', raw))
+    # 收集文档中已有的显式锚点（<a id="..."> 或 <span id="..."/>）
+    defined = set(re.findall(r'<(?:a|span) id="([^"]+)"', raw))
 
     # 收集所有纯 ASCII 标题自然生成的 slug（goldmark 可以正常处理）
     natural = set()

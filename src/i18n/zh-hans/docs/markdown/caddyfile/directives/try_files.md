@@ -4,9 +4,7 @@ title: "try_files（Caddyfile 指令）"
 
 # try_files
 
-将请求 URI 路径重写为列表中位于网站根目录下的首个存在文件。如果没有匹配的文件，则不进行重写。
-
-
+将请求 URI 路径重写为站点根中第一个存在的文件路径。如果没有匹配到文件，则不执行重写。
 
 ## 语法
 
@@ -16,64 +14,57 @@ try_files <files...> {
 }
 ```
 
-- **<files...>** 是要尝试的文件列表。URI 路径将被重写为其中第一个存在的文件。
+- **&lt;files...&gt;** 是要尝试查找的文件列表。URI 路径将被重写到列表中第一个存在的文件。
 
-  要匹配目录，请在路径末尾添加一个正斜杠 `/` 。所有文件路径均相对于网站[根目录](root)，且[通配符模式](https://pkg.go.dev/path/filepath#Match)将被展开。
+  若要匹配目录，请在路径末尾追加斜杠 `/`。所有文件路径都相对于站点 [root](root)，且会展开[glob 模式](https://pkg.go.dev/path/filepath#Match)。
 
-  每个参数还可以包含一个查询字符串，如果该查询字符串与特定文件匹配，则该查询字符串也会随之更改。
+  每个参数也可以包含查询字符串；若匹配到该文件，则对应查询字符串也会被改写。
 
-  如果 `try_policy` 是 `first_exist` （默认情况），则列表中的最后一项可以是一个以 `=` （例如 `=404`)，作为备选方案，系统将抛出该代码对应的错误；该错误可通过[`handle_errors`](handle_errors)进行捕获和处理。
+  如果 `try_policy` 是 `first_exist`（默认值），列表最后一项可写作带 `=` 的数字（例如 `=404`），作为兜底时返回该错误码；该错误可由 [`handle_errors`](handle_errors) 捕获和处理。
 
-- **策略**是指从文件列表中选择文件的规则。
-
-  默认： `first_exist`
+- **policy** 是从文件列表中选择文件的策略。默认值：`first_exist`
 
 
+## 扩展写法
 
-
-## 展开形式
-
-该 `try_files` 该指令基本上是以下内容的快捷方式：
+`try_files` 指令本质上是以下写法的快捷方式：
 
 ```caddy-d
 @try_files file <files...>
 rewrite @try_files {file_match.relative}
 ```
 
-请注意，此指令不支持匹配器标记。如果您需要更复杂的匹配逻辑，请以上文的扩展形式为基础进行实现。
+注意该指令不接受 matcher token。如果需要更复杂的匹配逻辑，可基于上述扩展写法继续实现。
 
-更多详情请参阅 [`file` 匹配器](/docs/caddyfile/matchers#file)。
-
-
-
+更多细节见 [`file` matcher](/docs/caddyfile/matchers#file)。
 
 ## 示例
 
-如果请求与任何静态文件都不匹配，请重写到您的 PHP 索引/路由入口点：
+如果请求不匹配任何静态文件，则重写到 PHP 入口：
 
 ```caddy-d
 try_files {path} /index.php
 ```
 
-同上，但需在查询字符串中添加原始路径（某些旧版 PHP 应用程序有此要求）：
+同上，但将原始路径也追加到查询字符串（某些旧版 PHP 应用需要）：
 
 ```caddy-d
 try_files {path} /index.php?{query}&p={path}
 ```
 
-同上，但也要匹配目录：
+同上，并额外匹配目录：
 
 ```caddy-d
 try_files {path} {path}/ /index.php?{query}&p={path}
 ```
 
-如果文件或目录已存在，则尝试重写；否则返回 404 错误（可通过 [`handle_errors`](handle_errors) 捕获并处理）：
+尝试重写到存在的文件或目录；若都不存在则返回 404（可被 [`handle_errors`](handle_errors) 捕获处理）：
 
 ```caddy-d
 try_files {path} {path}/ =404
 ```
 
-选择静态文件的最新部署版本（例如，提供 `index.be331df.html` 当 `index.html` 时）：
+选择静态文件的最新版本（例如请求 `index.html` 时，返回 `index.be331df.html`）：
 
 ```caddy-d
 try_files {file.base}.*.{file.ext} {

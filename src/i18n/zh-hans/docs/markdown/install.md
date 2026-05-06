@@ -44,14 +44,14 @@ title: "安装"
 
 1. 获取 Caddy 二进制文件：
 	- [来自 GitHub 上的发布版本](https://github.com/caddyserver/caddy/releases)（展开“资源”）
-		- 有关如何验证资产签名，请参阅《[验证资产签名](/docs/signature-verification)》
+		- 有关如何验证资源签名，请参阅[《验证资产签名》](/docs/signature-verification)
 	- [来自我们的下载页面](/download)
 	- [通过从源代码编译](/docs/build)（使用 `go` 或 `xcaddy`)
-2. [将 Caddy 安装为系统服务。](/docs/running#manual-installation)强烈建议这样做，尤其是对于生产服务器。
+2. [将 Caddy 安装为系统服务](/docs/running#manual-installation)。强烈建议这样做，尤其是用于生产服务器。
 
-将二进制文件放置在您的 `$PATH` （或 `%PATH%` 在 Windows 上）目录中，这样您就可以运行 `caddy` 时无需输入可执行文件的完整路径。（运行 `echo $PATH` 以查看符合条件的目录列表。）
+将二进制文件放在 `$PATH`（Windows 上为 `%PATH%`）中的某个目录即可直接运行 `caddy`，无需手工输入完整路径。运行 `echo $PATH` 可查看可用目录。
 
-您可以通过用新版替换静态二进制文件并重启 Caddy 来升级静态二进制文件。使用 [`caddy upgrade`](/docs/command-line#caddy-upgrade) 命令可以轻松完成此操作。
+更新静态二进制文件时，可直接替换为更新版本并重启 Caddy。也可以使用 [`caddy upgrade`](/docs/command-line#caddy-upgrade) 命令完成升级。
 
 
 
@@ -84,13 +84,13 @@ title: "安装"
 
 [**查看 Cloudsmith 仓库**](https://cloudsmith.io/~caddy/repos/)
 
-如果您希望在自定义构建的 Caddy 中使用打包的辅助文件（systemd 服务、bash 补全和默认配置），请参[阅此处的](/docs/build#package-support-files-for-custom-builds-for-debianubunturaspbian)说明。
+如果您希望在自定义构建的 Caddy 中仍使用官方软件包附带的辅助文件（systemd 服务、bash 补全和默认配置），请参阅[此处说明](/docs/build#package-support-files-for-custom-builds-for-debianubunturaspbian)。
 
 
 <a id="fedora-redhat-centos"></a>
 ## Fedora、RedHat、CentOS
 
-本软件包包含 Caddy 的两个 [systemd 服务](/docs/running#linux-service)单元文件，但默认情况下不会启用它们。建议使用该服务。若要启用，请阅读[服务使用说明](/docs/running#using-the-service)。
+本软件包包含 Caddy 的两个 [systemd 服务](/docs/running#linux-service)单元文件，但默认不会启用。建议启用该服务，详情请参阅[服务使用说明](/docs/running#using-the-service)。
 
 Fedora：
 
@@ -110,7 +110,7 @@ CentOS/RHEL：
 <a id="arch-linux-manjaro-parabola"></a>
 ## Arch Linux、Manjaro、Parabola
 
-该软件包包含两个经过大幅修改的 Caddy [systemd 服务](/docs/running#linux-service)单元文件，但默认情况下并未启用它们。
+该软件包包含两个经过较大修改的 Caddy [systemd 服务](/docs/running#linux-service)单元文件，但默认并不启用。
 这些修改包括自定义的启动/停止行为以及额外的沙箱标志，具体说明请参见 [systemd 的 exec 文档](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Sandboxing)；这可能会导致 Caddy 进程无法访问某些主机目录。
 
 <pre><code class="cmd"><span class="bash">pacman -Syu caddy</span></code></pre>
@@ -123,7 +123,7 @@ CentOS/RHEL：
 
 [**在 Docker Hub 上查看**](https://hub.docker.com/_/caddy)
 
-请参阅我们[推荐的 Docker Compose 配置](/docs/running#docker-compose)和使用说明。
+请参阅我们的[推荐 Docker Compose 配置](/docs/running#docker-compose)和使用说明。
 
 
 ## Railway
@@ -253,6 +253,6 @@ Windows：
 
 *注：这是由社区维护的安装方法。*
 
-如果您正在使用多语言工具管理器 [mise](https://github.com/jdx/mise)，可以使用如下命令安装最新版本：
+如果您正在使用 [mise](https://github.com/jdx/mise)（多语言工具版本管理器），可使用以下命令安装最新版本：
 
 <pre><code class="cmd">mise use -g caddy@latest</code></pre>
