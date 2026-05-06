@@ -53,6 +53,12 @@ const SITE_LOCALES = [
 	{ prefix: '/de',      label: 'Deutsch' },
 	{ prefix: '/ja',      label: '日本語' },
 	{ prefix: '/es',      label: 'Español' },
+	{ prefix: '/pt',      label: 'Português' },
+	{ prefix: '/fr',      label: 'Français' },
+	{ prefix: '/ru',      label: 'Русский' },
+	{ prefix: '/it',      label: 'Italiano' },
+	{ prefix: '/ko',      label: '한국어' },
+	{ prefix: '/zh-hant', label: '繁體中文' },
 ];
 
 function getDocsLocalePrefix() {

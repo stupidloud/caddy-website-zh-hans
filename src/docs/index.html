@@ -12,6 +12,24 @@
 {{else if hasPrefix "/de/" .OriginalReq.URL.Path -}}
 	{{$locale = "de" -}}
 	{{$htmlLang = "de" -}}
+{{else if hasPrefix "/pt/" .OriginalReq.URL.Path -}}
+	{{$locale = "pt" -}}
+	{{$htmlLang = "pt" -}}
+{{else if hasPrefix "/fr/" .OriginalReq.URL.Path -}}
+	{{$locale = "fr" -}}
+	{{$htmlLang = "fr" -}}
+{{else if hasPrefix "/ru/" .OriginalReq.URL.Path -}}
+	{{$locale = "ru" -}}
+	{{$htmlLang = "ru" -}}
+{{else if hasPrefix "/it/" .OriginalReq.URL.Path -}}
+	{{$locale = "it" -}}
+	{{$htmlLang = "it" -}}
+{{else if hasPrefix "/ko/" .OriginalReq.URL.Path -}}
+	{{$locale = "ko" -}}
+	{{$htmlLang = "ko" -}}
+{{else if hasPrefix "/zh-hant/" .OriginalReq.URL.Path -}}
+	{{$locale = "zh-hant" -}}
+	{{$htmlLang = "zh-Hant" -}}
 {{end -}}
 {{$docsPath := trimPrefix "/docs/" .OriginalReq.URL.Path -}}
 {{if $locale -}}
