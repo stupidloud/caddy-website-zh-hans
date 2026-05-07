@@ -49,16 +49,16 @@ function next(el, selector) {
 // To add a new locale, append an entry here.
 const SITE_LOCALES = [
 	{ prefix: '',         label: 'English' },
-	{ prefix: '/zh-hans', label: '中文' },
+	{ prefix: '/zh-hans', label: '简体中文' },
+	{ prefix: '/zh-hant', label: '繁體中文' },
+	{ prefix: '/es',      label: 'Español' },
+	{ prefix: '/fr',      label: 'Français' },
 	{ prefix: '/de',      label: 'Deutsch' },
 	{ prefix: '/ja',      label: '日本語' },
-	{ prefix: '/es',      label: 'Español' },
 	{ prefix: '/pt',      label: 'Português' },
-	{ prefix: '/fr',      label: 'Français' },
 	{ prefix: '/ru',      label: 'Русский' },
-	{ prefix: '/it',      label: 'Italiano' },
 	{ prefix: '/ko',      label: '한국어' },
-	{ prefix: '/zh-hant', label: '繁體中文' },
+	{ prefix: '/it',      label: 'Italiano' },
 ];
 
 function getDocsLocalePrefix() {
@@ -226,6 +226,12 @@ function initLangSwitcher() {
 	const switcher = $_('#lang-switcher');
 	const label = $_('#lang-switcher-label');
 	if (!switcher || !label) return;
+
+	// When user clicks the lang switcher, set a cookie so the server
+	// knows they made a manual choice and stops auto-redirecting them.
+	switcher.addEventListener('click', () => {
+		document.cookie = "manual_lang=true; path=/; max-age=2592000; SameSite=Lax";
+	});
 
 	const path = window.location.pathname;
 	const currentPrefix = SITE_LOCALES.find(l => l.prefix && path.startsWith(l.prefix))?.prefix ?? '';

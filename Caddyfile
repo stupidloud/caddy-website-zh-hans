@@ -2,6 +2,33 @@
 
 root src
 
+# Map Accept-Language header to language prefixes
+map {header.Accept-Language} {lang_prefix} {
+	~(?i)zh-hant  /zh-hant
+	~(?i)zh-tw    /zh-hant
+	~(?i)zh-hk    /zh-hant
+	~(?i)zh-mo    /zh-hant
+	~(?i)zh       /zh-hans
+	~(?i)es       /es
+	~(?i)fr       /fr
+	~(?i)de       /de
+	~(?i)ja       /ja
+	~(?i)pt       /pt
+	~(?i)ru       /ru
+	~(?i)ko       /ko
+	~(?i)it       /it
+	default       ""
+}
+
+# Automatically redirect visitors to their preferred language
+# if they haven't manually chosen one yet.
+@autoRedirect {
+	expression {lang_prefix} != ""
+	path / /docs /docs/
+	not header Cookie *manual_lang*
+}
+redir @autoRedirect {lang_prefix}/docs/ 302
+
 file_server {
 	disable_canonical_uris
 }
