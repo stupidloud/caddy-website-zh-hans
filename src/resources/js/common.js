@@ -49,6 +49,7 @@ function next(el, selector) {
 // To add a new locale, append an entry here.
 const SITE_LOCALES = [
 	{ prefix: '',         label: 'English' },
+	{ prefix: '/vi',      label: 'Tiếng Việt' },
 	{ prefix: '/zh-hans', label: '简体中文' },
 	{ prefix: '/zh-hant', label: '繁體中文' },
 	{ prefix: '/es',      label: 'Español' },

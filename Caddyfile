@@ -9,6 +9,7 @@ map {header.Accept-Language} {lang_prefix} {
 	~(?i)zh-hk    /zh-hant
 	~(?i)zh-mo    /zh-hant
 	~(?i)zh       /zh-hans
+	~(?i)vi       /vi
 	~(?i)es       /es
 	~(?i)fr       /fr
 	~(?i)de       /de
