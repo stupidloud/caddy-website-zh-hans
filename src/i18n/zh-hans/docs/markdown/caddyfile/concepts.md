@@ -253,17 +253,17 @@ Caddyfile 的结构可以通过以下方式直观地描述：
 				<div class="struct-code-box">
 					<div class="struct-block global">
 						<div class="struct-line">{</div>
-						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-opt-name">电子邮件</span>：<span class="struct-opt-value">you@yours.com</span></div>
-						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-opt-name">服务器</span> {</div>
-						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-indent-spacer"></span><span class="struct-subdir">受信任代理</span> <span class="struct-arg">静态私有地址范围</span></div>
+						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-opt-name">email</span> <span class="struct-opt-value">you@yours.com</span></div>
+						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-opt-name">servers</span> {</div>
+						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-indent-spacer"></span><span class="struct-subdir">trusted_proxies</span> <span class="struct-arg">static</span> <span class="struct-arg">private_ranges</span></div>
 						<div class="struct-line"><span class="struct-indent-spacer"></span>}</div>
 						<div class="struct-line">}</div>
 					</div>
 					<div class="struct-block snippet">
-						<div class="struct-line">(代码片段) {</div>
+						<div class="struct-line">(snippet) {</div>
 						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-comment"># 这是一个可重用的代码片段</span></div>
 						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">log</span> {</div>
-						<div class="struct-line"><span class="struct-subindent-spacer"></span><span class="struct-indent-spacer"></span><span class="struct-subdir">输出</span><span class="struct-arg">文件</span> <span class="struct-arg">/var/log/access.log</span></div>
+						<div class="struct-line"><span class="struct-subindent-spacer"></span><span class="struct-indent-spacer"></span><span class="struct-subdir">output</span> <span class="struct-arg">file</span> <span class="struct-arg">/var/log/access.log</span></div>
 						<div class="struct-line"><span class="struct-indent-spacer"></span>}</div>
 						<div class="struct-line">}</div>
 					</div>
@@ -271,20 +271,20 @@ Caddyfile 的结构可以通过以下方式直观地描述：
 						<div class="struct-line"><span class="struct-site-addr">example.com</span> {</div>
 						<div class="struct-block matcher">
 							<div class="struct-line"><span class="struct-matcher-token">@post</span> {</div>
-							<div class="struct-line"><span class="struct-subindent-spacer"></span><span class="struct-arg">POST</span> <span class="struct-matcher-token">方法</span></div>
+							<div class="struct-line"><span class="struct-subindent-spacer"></span><span class="struct-matcher-token">method</span> <span class="struct-arg">POST</span></div>
 							<div class="struct-line">}</div>
 						</div>
 						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">reverse_proxy</span> <span class="struct-matcher-token">@post</span> <span class="struct-arg">localhost:9001</span> <span class="struct-arg">localhost:9002</span> {</div>
-						<div class="struct-line"><span class="struct-subindent-spacer"></span><span class="struct-indent-spacer"></span><span class="struct-subdir">lb_policy</span> <span class="struct-arg">优先</span></div>
+						<div class="struct-line"><span class="struct-subindent-spacer"></span><span class="struct-indent-spacer"></span><span class="struct-subdir">lb_policy</span> <span class="struct-arg">first</span></div>
 						<div class="struct-line"><span class="struct-indent-spacer"></span>}</div>
-						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">文件服务器</span> <span class="struct-matcher-token">/static</span></div>
-						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">导入</span><span class="struct-arg">代码片段</span></div>
+						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">file_server</span> <span class="struct-matcher-token">/static</span></div>
+						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">import</span> <span class="struct-arg">snippet</span></div>
 						<div class="struct-line">}</div>
 					</div>
 					<div class="struct-block site">
 						<div class="struct-line struct-indent"><span class="struct-site-addr">www.example.com</span> {</div>
-						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">重定向</span> <span class="struct-arg">https://example.com{uri}</span></div>
-						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">导入</span><span class="struct-arg">代码片段</span></div>
+						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">redir</span> <span class="struct-arg">https://example.com{uri}</span></div>
+						<div class="struct-line struct-indent"><span class="struct-indent-spacer"></span><span class="struct-directive">import</span> <span class="struct-arg">snippet</span></div>
 						<div class="struct-line">}</div>
 					</div>
 				</div>
@@ -295,14 +295,14 @@ Caddyfile 的结构可以通过以下方式直观地描述：
 				<div class="struct-item"><div class="struct-swatch-border" style="border-color:var(--struct-border-global)"></div><div class="struct-label">全局选项块</div></div>
 				<div class="struct-item"><div class="struct-swatch-border" style="border-color:var(--struct-border-snippet)"></div><div class="struct-label">代码片段</div></div>
 				<div class="struct-item"><div class="struct-swatch-border" style="border-color:var(--struct-border-site)"></div><div class="struct-label">站点块</div></div>
-				<div class="struct-item"><div class="struct-swatch-border" style="border-color:var(--struct-border-matcher)"></div><div class="struct-label">匹配器块</div></div>
+				<div class="struct-item"><div class="struct-swatch-border" style="border-color:var(--struct-border-matcher)"></div><div class="struct-label">匹配器定义</div></div>
 				<div class="struct-item-spacer"></div>
 				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-opt-name-bg)"></div><div class="struct-label">选项名</div></div>
 				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-opt-value-bg)"></div><div class="struct-label">选项值</div></div>
 				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-comment-bg)"></div><div class="struct-label">注释</div></div>
 				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-site-addr-bg)"></div><div class="struct-label">站点地址</div></div>
 				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-directive-bg)"></div><div class="struct-label">指令</div></div>
-				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-matcher-token-bg)"></div><div class="struct-label">匹配令牌</div></div>
+				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-matcher-token-bg)"></div><div class="struct-label">匹配标记</div></div>
 				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-arg-bg)"></div><div class="struct-label">参数</div></div>
 				<div class="struct-item"><div class="struct-swatch-fill" style="background:var(--struct-subdir-bg)"></div><div class="struct-label">子指令</div></div>
 			</div>
@@ -493,7 +493,7 @@ Caddyfile 可以选择以一个不包含键的特殊块开头，该块称为[全
 }
 ```
 
-**请[阅读“全球选项”页面](/docs/caddyfile/options)以了解更多信息。**
+**请[阅读“全局选项”页面](/docs/caddyfile/options)以了解更多信息。**
 
 
 <a id="addresses"></a>
