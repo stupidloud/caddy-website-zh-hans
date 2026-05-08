@@ -82,7 +82,7 @@ Count | Profile
 
 - **`debug=N` (除 cpu 外的所有剖析):** 響應格式：N = 0: 二進制 (預設)，N > 0: 純文本
 - **`gc=N` (heap 剖析):** N > 0: 在剖析前運行垃圾回收週期
-- **`seconds=N` (allocs, block, goroutine, heap, mutex, threadcreate 剖析):** 返回增量剖析
+- **`seconds=N` (allocs, block, goroutine, heap, mutex, threadcreate 剖析):** 回傳增量剖析
 - **`seconds=N` (cpu, trace 剖析):** 給定持續時間的剖析
 
 因為這些是 HTTP 端點，你也可以使用任何 HTTP 客戶端（如 curl 或 wget）來下載剖析。

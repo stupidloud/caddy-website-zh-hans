@@ -54,7 +54,7 @@ var _ caddyfile.Unmarshaler = (*Gizmo)(nil)
 <a id="blocks"></a>
 ### 區塊（Blocks）
 
-為了接受單行無法容納的更多配置，您可能希望允許帶有子指令的區塊。這可以使用 `d.NextBlock()` 並進行迭代，直到返回原始嵌套層級：
+為了接受單行無法容納的更多配置，您可能希望允許帶有子指令的區塊。這可以使用 `d.NextBlock()` 並進行迭代，直到回傳原始嵌套層級：
 
 ```go
 for nesting := d.Nesting(); d.NextBlock(nesting); {
@@ -80,7 +80,7 @@ func init() {
 }
 ```
 
-如果您的指令僅返回單個 HTTP handler（這是常見的情況），您可能會發現 [`RegisterHandlerDirective`](https://pkg.go.dev/github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile?tab=doc#RegisterHandlerDirective) 更容易：
+如果您的指令僅回傳單個 HTTP handler（這是常見的情況），您可能會發現 [`RegisterHandlerDirective`](https://pkg.go.dev/github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile?tab=doc#RegisterHandlerDirective) 更容易：
 
 ```go
 func init() {
@@ -88,9 +88,9 @@ func init() {
 }
 ```
 
-基本概念是您與指令關聯的 [解析函數](https://pkg.go.dev/github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile?tab=doc#UnmarshalFunc) 會返回一個或多個 [`ConfigValue`](https://pkg.go.dev/github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile?tab=doc#ConfigValue) 值。（或者，如果使用 `RegisterHandlerDirective`，它只需直接返回填寫好的 `caddyhttp.MiddlewareHandler` 值。）每個配置值都與一個 [「類別（class）」](#classes) 相關聯，這有助於 HTTP Caddyfile 轉接器知道它可以用在最終 JSON 配置的哪些部分。所有配置值都會被堆放在一起，轉接器在構建最終 JSON 配置時會從中提取。
+基本概念是您與指令關聯的 [解析函數](https://pkg.go.dev/github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile?tab=doc#UnmarshalFunc) 會回傳一個或多個 [`ConfigValue`](https://pkg.go.dev/github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile?tab=doc#ConfigValue) 值。（或者，如果使用 `RegisterHandlerDirective`，它只需直接回傳填寫好的 `caddyhttp.MiddlewareHandler` 值。）每個配置值都與一個 [「類別（class）」](#classes) 相關聯，這有助於 HTTP Caddyfile 轉接器知道它可以用在最終 JSON 配置的哪些部分。所有配置值都會被堆放在一起，轉接器在構建最終 JSON 配置時會從中提取。
 
-這種設計允許您的指令為任何公認的類別返回任何配置值，這意味著它可以影響 HTTP Caddyfile 轉接器具有指定類別的配置的任何部分。
+這種設計允許您的指令為任何公認的類別回傳任何配置值，這意味著它可以影響 HTTP Caddyfile 轉接器具有指定類別的配置的任何部分。
 
 如果您已經實現了 `UnmarshalCaddyfile()` 方法，那麼您的解析函數可以像下面這樣簡單：
 
@@ -108,7 +108,7 @@ func parseCaddyfileHandler(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler,
 <a id="handler-order"></a>
 ### Handler 順序
 
-所有返回 HTTP middleware/handler 值的指令都需要以正確的順序執行。例如，設定網站根目錄的 handler 必須在存取根目錄的 handler 之前執行，以便它知道目錄路徑是什麼。
+所有回傳 HTTP middleware/handler 值的指令都需要以正確的順序執行。例如，設定網站根目錄的 handler 必須在存取根目錄的 handler 之前執行，以便它知道目錄路徑是什麼。
 
 HTTP Caddyfile [對標準指令具有硬編碼的排序](/docs/caddyfile/directives#directive-order)。這確保了使用者不需要了解其網頁伺服器最常用功能的實現細節，並使他們更容易編寫正確的配置。鑑於 Caddyfile 的可擴展性，單個硬編碼列表還可以防止不確定性。
 

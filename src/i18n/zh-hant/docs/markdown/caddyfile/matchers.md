@@ -251,7 +251,7 @@ example.com {
 expression <cel...>
 ```
 
-通過任何返回 `true` 或 `false` 的 [CEL (Common Expression Language)](https://github.com/google/cel-spec) 表達式。
+通過任何回傳 `true` 或 `false` 的 [CEL (Common Expression Language)](https://github.com/google/cel-spec) 表達式。
 
 大多數其他請求 matcher 也可以在表達式中作為函數使用，這比外部表達式提供了更大的布林邏輯靈活性。有關 CEL 表達式中支持的語法，請參閱每個 matcher 的文檔。
 
@@ -273,7 +273,7 @@ Caddy [placeholder](/docs/conventions#placeholders)（或 [Caddyfile 簡寫](/do
 @methods expression {method}.startsWith("P")
 ```
 
-匹配處理程序返回錯誤狀態碼 `404` 的請求，將與 [`handle_errors` 指令](/docs/caddyfile/directives/handle_errors) 結合使用：
+匹配處理程序回傳錯誤狀態碼 `404` 的請求，將與 [`handle_errors` 指令](/docs/caddyfile/directives/handle_errors) 結合使用：
 
 ```caddy-d
 @404 expression {err.status_code} == 404

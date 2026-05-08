@@ -247,7 +247,7 @@ HTTP(S) 請求數計數器。
 <a id="caddy-http-response-size-bytes"></a>
 #### `caddy_http_response_size_bytes`
 
-返回的回應主體大小的直方圖。
+回傳的回應主體大小的直方圖。
 
 標籤 | 描述
 -------|------------

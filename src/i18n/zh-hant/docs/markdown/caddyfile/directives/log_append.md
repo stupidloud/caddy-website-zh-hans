@@ -19,7 +19,7 @@ title: log_append (Caddyfile 指令)
 log_append [<matcher>] [<]<key> <value>
 ```
 
-預設情況下，log 欄位是在中間件鏈返回時（即「晚期」）添加的，是在所有後續處理程序完成之後（例如像 [`reverse_proxy`](reverse_proxy)、[`respond`](respond) 或 [`file_server`](file_server) 這些寫入響應的處理程序），因此它捕捉了請求和響應的最終狀態。
+預設情況下，log 欄位是在中間件鏈回傳時（即「晚期」）添加的，是在所有後續處理程序完成之後（例如像 [`reverse_proxy`](reverse_proxy)、[`respond`](respond) 或 [`file_server`](file_server) 這些寫入響應的處理程序），因此它捕捉了請求和響應的最終狀態。
 
 如果使用 `<` 作為 key 的前綴，它被標記為「早期」，這意味著 log 欄位將在調用鏈中的下一個處理程序 *之前* 被添加到日誌中，因此可以在請求被後續處理程序修改之前讀取它。
 

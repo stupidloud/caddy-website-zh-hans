@@ -41,7 +41,7 @@ func (a MyAdapter) Adapt(body []byte, options map[string]interface{}) ([]byte, [
 - 參閱 [`RegisterAdapter()`](https://pkg.go.dev/github.com/caddyserver/caddy/v2/caddyconfig?tab=doc#RegisterAdapter) 的 godoc
 - 參閱 [`Adapter`](https://pkg.go.dev/github.com/caddyserver/caddy/v2/caddyconfig?tab=doc#Adapter) 接口的 godoc
 
-返回的 JSON **不應** 縮進；它應始終是緊湊的。如果調用者願意，他們可以隨時對其進行美化。
+回傳的 JSON **不應** 縮進；它應始終是緊湊的。如果調用者願意，他們可以隨時對其進行美化。
 
 請注意，雖然 config adapters 是 Caddy *plugins*，但它們不是 Caddy *modules*，因為它們不會集成到配置的某一部分中（但為了方便起見，它們會顯示在 `list-modules` 中）。因此，它們沒有 `Provision()` 或 `Validate()` 方法，也不遵循其餘的 module 生命周期。它們只需要實現 `Adapter` 接口並註冊為適配器即可。
 

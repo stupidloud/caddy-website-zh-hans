@@ -34,7 +34,7 @@ func init() {
 type Gizmo struct {
 }
 
-// CaddyModule 返回 Caddy module 資訊。
+// CaddyModule 回傳 Caddy module 資訊。
 func (Gizmo) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
 		ID:  "foo.gizmo",
@@ -181,7 +181,7 @@ func (g *Gizmo) Provision(ctx caddy.Context) error {
 }
 ```
 
-這是您應該為使用者未提供的欄位（不是其零值的欄位）設置默認值的地方。如果一個欄位是必填的，如果未設置，您可以返回錯誤。對於零值具有含義的數字欄位（例如某些逾時持續時間），您可能希望支持 `-1` 表示「關閉」而不是 `0`，因此如果使用者未配置，您可以設置默認值。
+這是您應該為使用者未提供的欄位（不是其零值的欄位）設置默認值的地方。如果一個欄位是必填的，如果未設置，您可以回傳錯誤。對於零值具有含義的數字欄位（例如某些逾時持續時間），您可能希望支持 `-1` 表示「關閉」而不是 `0`，因此如果使用者未配置，您可以設置默認值。
 
 這通常也是 host modules 載入其 guest/child modules 的地方。
 
@@ -307,9 +307,9 @@ func (g *Gizmo) Provision(ctx caddy.Context) error {
 
 請注意，`LoadModule()` 調用接受指向 struct 的指針和作為字串的欄位名稱。很奇怪，對吧？為什麼不直接傳遞 struct 欄位呢？這是因為根據配置的佈局，有幾種不同的載入 module 的方式。此方法簽名允許 Caddy 使用反射來找出載入 module 的最佳方式，最重要的是，讀取其 struct tags。
 
-如果 guest module 必須由使用者顯式設置，則在嘗試載入它之前，如果 Raw 欄位為 nil 或為空，您應該返回錯誤。
+如果 guest module 必須由使用者顯式設置，則在嘗試載入它之前，如果 Raw 欄位為 nil 或為空，您應該回傳錯誤。
 
-注意載入的 module 是如何進行類型斷言的：`g.Gadget = val.(Gadgeter)` —— 這是因為返回的 `val` 是一個 `interface{}` 類型，它並非特別有用。但是，我們預期聲明的 namespace 中的所有 modules（本例中為來自 struct tag 的 `foo.gizmo.gadgets`）都實現了 `Gadgeter` 接口，因此此類型斷言是安全的，然後我們就可以使用它了！
+注意載入的 module 是如何進行類型斷言的：`g.Gadget = val.(Gadgeter)` —— 這是因為回傳的 `val` 是一個 `interface{}` 類型，它並非特別有用。但是，我們預期聲明的 namespace 中的所有 modules（本例中為來自 struct tag 的 `foo.gizmo.gadgets`）都實現了 `Gadgeter` 接口，因此此類型斷言是安全的，然後我們就可以使用它了！
 
 如果您的 host module 定義了一個新的 namespace，請務必為開發者記錄該 namespace 及其 Go 類型，[就像我們在這裡所做的那樣](/docs/extending-caddy/namespaces)。
 
@@ -355,7 +355,7 @@ type Middleware struct {
 	w io.Writer
 }
 
-// CaddyModule 返回 Caddy module 資訊。
+// CaddyModule 回傳 Caddy module 資訊。
 func (Middleware) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
 		ID:  "http.handlers.visitor_ip",

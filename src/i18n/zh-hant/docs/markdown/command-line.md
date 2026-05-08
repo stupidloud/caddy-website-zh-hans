@@ -389,7 +389,7 @@ $ sudo mandb
 
 啟動一個或多個簡單的、硬編碼的 HTTP 伺服器，這對於開發、預演和某些生產案例非常有用。它對於驗證或除錯 HTTP 客戶端、指令碼甚至負載平衡器很有幫助。
 
-`--status` 是要返回的 HTTP 狀態碼。
+`--status` 是要回傳的 HTTP 狀態碼。
 
 `--header` 添加一個 HTTP 標頭；預期格式為 `Field: value`。此標誌可以多次使用。
 
@@ -534,7 +534,7 @@ I'm server 2 on port 2002</code></pre>
 	[--pidfile &lt;file&gt;]
 	[-w, --watch]</code></code></pre>
 
-與 [`caddy run`](#caddy-run) 相同，但在後臺運行。此命令僅在後臺程序成功運行（或運行失敗）之前阻塞，然後返回。
+與 [`caddy run`](#caddy-run) 相同，但在後臺運行。此命令僅在後臺程序成功運行（或運行失敗）之前阻塞，然後回傳。
 
 注意：標誌 `--config` *不* 支援 `-` 來從 stdin 讀取配置。
 
@@ -753,7 +753,7 @@ Caddy 會捕捉某些訊號並忽略其他訊號。訊號可以啟動特定的�
 <a id="exit-codes"></a>
 ## 退出碼
 
-Caddy 在程序退出時返回一個代碼：
+Caddy 在程序退出時回傳一個代碼：
 
 代碼 | 含義
 -----|---------

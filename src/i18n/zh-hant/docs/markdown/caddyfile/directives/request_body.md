@@ -17,7 +17,7 @@ request_body [<matcher>] {
 }
 ```
 
-- **max_size** 是請求主體允許的最大位元組數。它支援 [go-humanize](https://pkg.go.dev/github.com/dustin/go-humanize#pkg-constants) 支援的所有大小值。讀取超過此位元組數將返回 HTTP 狀態碼 413 的錯誤。
+- **max_size** 是請求主體允許的最大位元組數。它支援 [go-humanize](https://pkg.go.dev/github.com/dustin/go-humanize#pkg-constants) 支援的所有大小值。讀取超過此位元組數將回傳 HTTP 狀態碼 413 的錯誤。
 
 ⚠️ *實驗性功能* <span style='white-space: pre;'> | </span> <span>v2.10.0+</span>
 - **set** 允許將請求主體設定為特定內容。內容可以包含 placeholder 以動態插入數據。

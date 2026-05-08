@@ -211,7 +211,7 @@ reverse_proxy [<matcher>] [<upstreams...>] {
 <a id="dynamic-upstreams"></a>
 ### 動態上游
 
-Caddy 的 reverse_proxy 標配了一些動態上游模組。請注意，使用動態上游對負載平衡和健康檢查有影響，具體取決於具體的策略配置：主動健康檢查不適用於動態上游；如果上游列表相對穩定且一致（特別是使用輪詢策略），負載平衡和被動健康檢查的效果最好。理想情況下，動態上游模組僅返回健康、可用的後端。
+Caddy 的 reverse_proxy 標配了一些動態上游模組。請注意，使用動態上游對負載平衡和健康檢查有影響，具體取決於具體的策略配置：主動健康檢查不適用於動態上游；如果上游列表相對穩定且一致（特別是使用輪詢策略），負載平衡和被動健康檢查的效果最好。理想情況下，動態上游模組僅回傳健康、可用的後端。
 
 
 <a id="srv"></a>
@@ -378,7 +378,7 @@ Caddy 的 reverse_proxy 標配了一些動態上游模組。請注意，使用�
 
 - **health_request_body** <span id="health_request_body"/> 是一個字串，表示隨主動健康檢查發送的請求正文。
 
-- **health_body** <span id="health_body"/> 是一個子字串或正規表達式，用於匹配主動健康檢查的響應正文。如果後端未返回匹配的正文，它將被標記為宕機。
+- **health_body** <span id="health_body"/> 是一個子字串或正規表達式，用於匹配主動健康檢查的響應正文。如果後端未回傳匹配的正文，它將被標記為宕機。
 
 - **health_follow_redirects** <span id="health_follow_redirects"/> 將使健康檢查遵循上游提供的重定向。預設情況下，重定向響應會導致健康檢查被視為失敗。
 
@@ -394,7 +394,7 @@ Caddy 的 reverse_proxy 標配了一些動態上游模組。請注意，使用�
 
 - **max_fails** <span id="max_fails"/> 是在將後端視為宕機之前，在 `fail_duration` 內所需的最高失敗請求數；必須 >= `1`；預設為 `1`。
 
-- **unhealthy_status** <span id="unhealthy_status"/> 如果響應返回這些狀態碼之一，則將請求計為失敗。可以是 3 位數字的狀態碼或以 `xx` 結尾的狀態碼類別，例如：`404` 或 `5xx`。
+- **unhealthy_status** <span id="unhealthy_status"/> 如果響應回傳這些狀態碼之一，則將請求計為失敗。可以是 3 位數字的狀態碼或以 `xx` 結尾的狀態碼類別，例如：`404` 或 `5xx`。
 
 - **unhealthy_latency** <span id="unhealthy_latency"/> 是一個 [持續時間值](/docs/conventions#durations)，如果獲取響應花費了這麼長時間，則將請求計為失敗。
 
@@ -434,7 +434,7 @@ Caddy 的 reverse_proxy 標配了一些動態上游模組。請注意，使用�
 
 - **request_buffers** <span id="request_buffers"/> 將導致代理在將請求正文發送到上游之前，將高達 `<size>` 的字節量讀入緩衝區。這非常低效，僅應在後端要求無延遲讀取請求正文時才執行此操作（這是後端應用程序應修復的問題）。這接受 [go-humanize](https://github.com/dustin/go-humanize/blob/master/bytes.go) 支援的所有大小格式。
 
-- **response_buffers** <span id="response_buffers"/> 將導致代理在將響應正文返回給客戶端之前，將高達 `<size>` 的字節量讀入緩衝區。出於效能原因，應儘可能避免這種做法，但如果後端記憶體限制較嚴，則可能會很有用。這接受 [go-humanize](https://github.com/dustin/go-humanize/blob/master/bytes.go) 支援的所有大小格式。
+- **response_buffers** <span id="response_buffers"/> 將導致代理在將響應正文回傳給客戶端之前，將高達 `<size>` 的字節量讀入緩衝區。出於效能原因，應儘可能避免這種做法，但如果後端記憶體限制較嚴，則可能會很有用。這接受 [go-humanize](https://github.com/dustin/go-humanize/blob/master/bytes.go) 支援的所有大小格式。
 
 - **stream_timeout** <span id="stream_timeout"/> 是一個 [持續時間值](/docs/conventions#durations)，超時結束時，WebSocket 等串流請求將被強制關閉。這實際上是在連線保持開啟時間過長時將其取消。一個合理的起點可能是 `24h` 以清除早於一天的連線。預設：無逾時。
 

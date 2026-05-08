@@ -33,7 +33,7 @@ vars [<matcher>] [<name> <value>] {
 <a id="examples"></a>
 ## 範例
 
-設置單個變量，其值根據請求路徑而定，然後返回該值：
+設置單個變量，其值根據請求路徑而定，然後回傳該值：
 
 ```caddy
 example.com {

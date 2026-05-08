@@ -36,7 +36,7 @@ respond [<matcher>] <status>|<body> [<status>] {
 
 <aside class="tip">
 
-使用錯誤狀態碼進行回應與在 handler chain 中返回錯誤不同，後者會在內部調用錯誤處理程式（error handlers）。
+使用錯誤狀態碼進行回應與在 handler chain 中回傳錯誤不同，後者會在內部調用錯誤處理程式（error handlers）。
 
 </aside>
 

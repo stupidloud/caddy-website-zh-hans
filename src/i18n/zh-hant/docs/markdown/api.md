@@ -52,13 +52,13 @@ Caddy 透過管理端點進行設定，該端點可以使用 HTTP 透過 [REST <
   將設定轉換為 JSON 而不執行它
 
 - **[GET /pki/ca/&lt;id&gt;](#get-pkicaltidgt)**
-  返回有關特定 [PKI app](/docs/json/apps/pki/) CA 的資訊
+  回傳有關特定 [PKI app](/docs/json/apps/pki/) CA 的資訊
 
 - **[GET /pki/ca/&lt;id&gt;/certificates](#get-pkicaltidgtcertificates)**
-  返回特定 [PKI app](/docs/json/apps/pki/) CA 的證書鏈
+  回傳特定 [PKI app](/docs/json/apps/pki/) CA 的證書鏈
 
 - **[GET /reverse_proxy/upstreams](#get-reverse-proxyupstreams)**
-  返回已設定的 proxy upstreams 的當前狀態
+  回傳已設定的 proxy upstreams 的當前狀態
 
 
 ## POST /load
@@ -99,7 +99,7 @@ Caddy 透過管理端點進行設定，該端點可以使用 HTTP 透過 [REST <
 
 ## GET /config/[path]
 
-匯出指定路徑處的 Caddy 當前設定。返回一個 JSON 正文。
+匯出指定路徑處的 Caddy 當前設定。回傳一個 JSON 正文。
 
 <a id="examples"></a>
 ### 範例
@@ -273,7 +273,7 @@ Caddy 的 API 不支援跨越多個請求的事務，並且 HTTP 是一種無狀
 此操作的基本算法如下：
 
 1. 對設定內的任何範圍 `S` 執行 `GET` 請求。保留響應的 `Etag` 標頭。
-2. 在返回的設定上進行您想要的更改。
+2. 在回傳的設定上進行您想要的更改。
 3. 在範圍 `S` 內執行 `POST|PUT|PATCH|DELETE` 請求，將 `If-Match` 請求標頭設定為儲存的 `Etag` 值。
 4. 如果響應是 HTTP 412 (Precondition Failed)，則從步驟 1 重試，或在嘗試次數過多後放棄。
 
@@ -282,7 +282,7 @@ Caddy 的 API 不支援跨越多個請求的事務，並且 HTTP 是一種無狀
 
 ## POST /adapt
 
-將設定轉換為 Caddy JSON 而不載入或執行它。如果成功，生成的 JSON 文件將在響應正文中返回。
+將設定轉換為 Caddy JSON 而不載入或執行它。如果成功，生成的 JSON 文件將在響應正文中回傳。
 
 Content-Type 標頭用於以與 [/load](#post-load) 相同的方式指定設定格式。例如，要轉換 Caddyfile，請設定 `Content-Type: text/caddyfile`。
 
@@ -300,7 +300,7 @@ Content-Type 標頭用於以與 [/load](#post-load) 相同的方式指定設定�
 
 ## GET /pki/ca/&lt;id&gt;
 
-透過 ID 返回有關特定 [PKI app](/docs/json/apps/pki/) CA 的資訊。如果請求的 CA ID 是預設值 (`local`)，則如果尚未配置該 CA，則將配置該 CA。如果先前未配置其他 CA ID，則將返回錯誤。
+透過 ID 回傳有關特定 [PKI app](/docs/json/apps/pki/) CA 的資訊。如果請求的 CA ID 是預設值 (`local`)，則如果尚未配置該 CA，則將配置該 CA。如果先前未配置其他 CA ID，則將回傳錯誤。
 
 <pre><code class="cmd"><span class="bash">curl "http://localhost:2019/pki/ca/local" | jq</span>
 {
@@ -315,7 +315,7 @@ Content-Type 標頭用於以與 [/load](#post-load) 相同的方式指定設定�
 
 ## GET /pki/ca/&lt;id&gt;/certificates
 
-透過 ID 返回特定 [PKI app](/docs/json/apps/pki/) CA 的證書鏈。如果請求的 CA ID 是預設值 (`local`)，則如果尚未配置該 CA，則將配置該 CA。如果先前未配置其他 CA ID，則將返回錯誤。
+透過 ID 回傳特定 [PKI app](/docs/json/apps/pki/) CA 的證書鏈。如果請求的 CA ID 是預設值 (`local`)，則如果尚未配置該 CA，則將配置該 CA。如果先前未配置其他 CA ID，則將回傳錯誤。
 
 此端點由 [`caddy trust`](/docs/command-line#caddy-trust) 命令在內部使用，以允許將 CA 的根證書安裝到系統的信任存儲中。
 
@@ -335,7 +335,7 @@ MIIBpDCCAUmgAwIBAgIQTS5a+3LUKNxC6qN3ZDR8bDAKBggqhkjOPQQDAjAwMS4w
 <a id="get-reverse-proxyupstreams"></a>
 ## GET /reverse_proxy/upstreams
 
-以 JSON 文件形式返回已設定的 reverse proxy upstreams（後端）的當前狀態。
+以 JSON 文件形式回傳已設定的 reverse proxy upstreams（後端）的當前狀態。
 
 <pre><code class="cmd"><span class="bash">curl "http://localhost:2019/reverse_proxy/upstreams" | jq</span>
 [

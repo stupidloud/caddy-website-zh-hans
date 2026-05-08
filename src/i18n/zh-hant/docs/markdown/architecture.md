@@ -113,7 +113,7 @@ Modules 被載入、配置（provisioned）和驗證、使用，然後被清理�
 
 其他常見的配置任務是設置在 module 生命周期內將使用的內部值，或將輸入標準化。例如，[`http.matchers.remote_ip`](/docs/modules/http.matchers.remote_ip) module 使用配置階段從它從 JSON 接收到的字串輸入中解析 CIDR 值。這樣，它就不必在每次 HTTP 請求期間執行此操作，因此效率更高。
 
-驗證也可以在配置階段進行。如果 module 最終的配置無效，則可以在此處返回錯誤，從而中止整個配置載入過程。
+驗證也可以在配置階段進行。如果 module 最終的配置無效，則可以在此處回傳錯誤，從而中止整個配置載入過程。
 
 <a id="use-phase"></a>
 ### Use phase
