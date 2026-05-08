@@ -80,11 +80,10 @@
 		<script src="/resources/js/docs-api.js{{template "cacheBust"}}"></script>
 		<script src="/resources/js/json-docs.js{{template "cacheBust"}}"></script>
 		<script src="/resources/js/module-docs.js{{template "cacheBust"}}"></script>
-
-		{{$directives := list }}
-		{{range $i, $file := (listFiles "/docs/markdown/caddyfile/directives")}}
-			{{$directives = append $directives ($file | trimSuffix ".md")}}
-		{{end}}
+		{{$directives := list -}}
+		{{- range $file := (listFiles "/docs/markdown/caddyfile/directives") -}}
+			{{$directives = append $directives ($file | trimSuffix ".md") -}}
+		{{- end -}}
 		<script type="text/javascript">window.CaddyfileDirectives = {{$directives | toJson}};</script>
 	</head>
 	<body class="docs-body">
