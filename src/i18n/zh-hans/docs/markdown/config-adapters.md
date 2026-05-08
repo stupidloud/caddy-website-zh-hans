@@ -17,7 +17,7 @@ Caddy 的默认配置语言是 [JSON](https://www.json.org/json-en.html)，但�
 - [**jsonc**](https://github.com/caddyserver/jsonc-adapter)
 - [**json5**](https://github.com/caddyserver/json5-adapter)
 - [**yaml**](https://github.com/abiosoft/caddy-yaml)
-- [**提示**](https://github.com/caddyserver/cue-adapter)
+- [**cue**](https://github.com/caddyserver/cue-adapter)
 - [**toml**](https://github.com/awoodbeck/caddy-toml-adapter)
 - [**hcl**](https://github.com/francislavoie/caddy-hcl)
 - [**dhall**](https://github.com/mholt/dhall-adapter)
