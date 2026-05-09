@@ -21,12 +21,10 @@ map {header.Accept-Language} {lang_prefix} {
 	default       ""
 }
 
-# Automatically redirect visitors to their preferred language
-# if they haven't manually chosen one yet.
+# Automatically redirect root visitors to their preferred language.
 @autoRedirect {
 	expression {lang_prefix} != ""
-	path / /docs /docs/
-	not header Cookie *manual_lang*
+	path /
 }
 redir @autoRedirect {lang_prefix}/docs/ 302
 

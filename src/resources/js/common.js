@@ -91,7 +91,7 @@ function localizeDocsLinks(root = document) {
 		return;
 	}
 
-	root.querySelectorAll('a[href^="/docs"]:not(#lang-switcher)').forEach(link => {
+	root.querySelectorAll('a[href^="/docs"]').forEach(link => {
 		link.setAttribute('href', localizeDocsHref(link.getAttribute('href')));
 	});
 }
@@ -222,30 +222,35 @@ function nextTheme() {
 // immediately set the configured theme to avoid flash
 setTheme(getTheme());
 
-// initLangSwitcher sets up the language switcher in the topbar.
+function getLocaleAndPathForSwitcher(path = window.location.pathname) {
+	const exactLocale = SITE_LOCALES.find(locale => locale.prefix && path === locale.prefix);
+	const prefixedLocale = SITE_LOCALES.find(locale => locale.prefix && path.startsWith(locale.prefix + '/'));
+	const currentPrefix = exactLocale?.prefix || prefixedLocale?.prefix || '';
+	const pathWithoutPrefix = path.slice(currentPrefix.length) || '/';
+
+	return { currentPrefix, pathWithoutPrefix };
+}
+
+// initLangSwitcher sets up the language dropdown in the topbar.
 function initLangSwitcher() {
 	const switcher = $_('#lang-switcher');
-	const label = $_('#lang-switcher-label');
-	if (!switcher || !label) return;
+	if (!switcher) return;
 
-	// When user clicks the lang switcher, set a cookie so the server
-	// knows they made a manual choice and stops auto-redirecting them.
-	switcher.addEventListener('click', () => {
-		document.cookie = "manual_lang=true; path=/; max-age=2592000; SameSite=Lax";
+	const { currentPrefix, pathWithoutPrefix } = getLocaleAndPathForSwitcher();
+	switcher.replaceChildren();
+	SITE_LOCALES.forEach(locale => {
+		const option = document.createElement('option');
+		option.value = pathWithoutPrefix === '/'
+			? (locale.prefix ? `${locale.prefix}/docs/` : '/')
+			: `${locale.prefix}${pathWithoutPrefix}`;
+		option.textContent = locale.label;
+		option.selected = locale.prefix === currentPrefix;
+		switcher.appendChild(option);
 	});
 
-	const path = window.location.pathname;
-	const currentPrefix = SITE_LOCALES.find(l => l.prefix && path.startsWith(l.prefix))?.prefix ?? '';
-	const currentIdx = SITE_LOCALES.findIndex(l => l.prefix === currentPrefix);
-	const nextLocale = SITE_LOCALES[(currentIdx + 1) % SITE_LOCALES.length];
-	const pathWithoutPrefix = currentPrefix ? path.slice(currentPrefix.length) : path;
-
-	label.textContent = nextLocale.label;
-	if (pathWithoutPrefix === '/') {
-		switcher.href = nextLocale.prefix ? `${nextLocale.prefix}/docs/` : '/';
-		return;
-	}
-	switcher.href = nextLocale.prefix + pathWithoutPrefix;
+	switcher.addEventListener('change', (event) => {
+		window.location.href = event.currentTarget.value;
+	});
 }
 
 ready(initLangSwitcher);

@@ -192,6 +192,30 @@ header nav>ul {
 	color: var(--topbar-link-color-hover);
 }
 
+.lang-select {
+	display: flex;
+	align-items: center;
+	gap: .4em;
+}
+
+#lang-switcher {
+	background: transparent;
+	border: 0;
+	color: var(--topbar-link-color);
+	font-family: inherit;
+	font-size: inherit;
+	cursor: pointer;
+	padding: 10px 10px 8px;
+}
+
+#lang-switcher:hover {
+	color: var(--topbar-link-color-hover);
+}
+
+#lang-switcher option {
+	color: #1f2c34;
+}
+
 #zerossl-link {
 	display: block;
 	font-weight: bold;
