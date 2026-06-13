@@ -6,6 +6,12 @@ title: templates (directive Caddyfile)
 
 Exécute le corps de la réponse en tant que document [modèle (template)](/docs/modules/http.handlers.templates). Les modèles fournissent des primitives fonctionnelles pour créer des pages dynamiques simples. Les fonctionnalités incluent des sous-requêtes HTTP, des inclusions de fichiers HTML, le rendu de Markdown, l'analyse de JSON, des structures de données de base, de l'aléatoire, la gestion du temps, et bien plus encore.
 
+<aside class="tip">
+
+Les modèles peuvent être exécutés sur le corps de la réponse provenant de *n'importe quelle* origine, qu'il s'agisse d'un fichier statique sur le disque ou d'un service web servi via un proxy. Il serait sage de n'activer l'évaluation des modèles que pour du contenu auquel vous faites confiance, que vous contrôlez et/ou que vous assainissez ! Une mauvaise configuration peut entraîner des failles de sécurité. Par exemple, si une application servie via un proxy permet aux utilisateurs d'écrire/de publier du contenu, et que ce contenu contient du texte ressemblant à des actions de modèle, cela permettrait à des utilisateurs arbitraires d'évaluer des modèles et potentiellement d'accéder à l'environnement, aux fichiers locaux et au réseau. N'activez pas les modèles sur du contenu généré par les utilisateurs (sans l'assainir).
+
+</aside>
+
 
 ## Syntaxe
 

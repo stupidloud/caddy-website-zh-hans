@@ -6,6 +6,12 @@ title: templates (chỉ thị Caddyfile)
 
 Thực thi phần thân phản hồi dưới dạng tài liệu [template](/docs/modules/http.handlers.templates). Các template cung cấp các thành phần chức năng để tạo các trang động đơn giản. Các tính năng bao gồm các yêu cầu con HTTP, bao gồm tệp HTML, kết xuất Markdown, phân tích cú pháp JSON, cấu trúc dữ liệu cơ bản, tính ngẫu nhiên, thời gian và nhiều tính năng khác.
 
+<aside class="tip">
+
+Template có thể được thực thi trên phần thân phản hồi từ *bất kỳ* nguồn gốc nào, dù đó là một tệp tĩnh trên đĩa hay một dịch vụ web qua proxy. Sẽ là khôn ngoan nếu chỉ bật việc đánh giá template cho nội dung mà bạn tin tưởng, kiểm soát và/hoặc đã làm sạch! Cấu hình sai có thể dẫn đến các lỗ hổng bảo mật. Ví dụ, nếu một ứng dụng qua proxy cho phép người dùng viết/đăng nội dung, và nội dung đó chứa văn bản trông giống như các thao tác template, thì điều đó sẽ cho phép người dùng bất kỳ đánh giá template và có khả năng truy cập vào môi trường, các tệp cục bộ và mạng. Đừng bật template trên nội dung do người dùng tạo (mà không làm sạch).
+
+</aside>
+
 
 <a id="syntax"></a>
 ## Cú pháp

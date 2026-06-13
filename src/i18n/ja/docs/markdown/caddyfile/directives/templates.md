@@ -6,6 +6,12 @@ title: templates (Caddyfile directive)
 
 レスポンス body を [template](/docs/modules/http.handlers.templates) ドキュメントとして実行します。Templates は、簡単な動的ページを作るための機能的な primitive を提供します。HTTP subrequest、HTML ファイル include、Markdown rendering、JSON parsing、基本的なデータ構造、乱数、時刻などの機能があります。
 
+<aside class="tip">
+
+Templates は、ディスク上の静的ファイルであれ proxy 経由の Web サービスであれ、*あらゆる* origin のレスポンス body に対して実行される可能性があります。template の評価は、信頼でき、制御でき、かつ/または sanitize した内容に対してのみ有効にするのが賢明です！設定を誤ると、セキュリティ侵害につながる可能性があります。たとえば、proxy 経由のアプリがユーザーにコンテンツの書き込み/投稿を許可していて、そのコンテンツに template action のように見えるテキストが含まれている場合、任意のユーザーが template を評価できてしまい、環境変数・ローカルファイル・ネットワークにアクセスされる恐れがあります。ユーザー生成コンテンツに対して（sanitize せずに）templates を有効にしないでください。
+
+</aside>
+
 
 <a id="syntax"></a>
 ## 構文

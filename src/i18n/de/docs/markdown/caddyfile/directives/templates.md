@@ -6,6 +6,12 @@ title: templates (Caddyfile directive)
 
 Führt den Antwortbody als [template](/docs/modules/http.handlers.templates)-Dokument aus. Templates stellen funktionale Grundbausteine bereit, um einfache dynamische Seiten zu erstellen. Zu den Funktionen gehören HTTP-Subrequests, HTML-Datei-Includes, Markdown-Rendering, JSON-Parsing, einfache Datenstrukturen, Zufall, Zeit und mehr.
 
+<aside class="tip">
+
+Templates können auf dem Antwortbody von *beliebiger* Herkunft ausgeführt werden – egal ob es sich um eine statische Datei auf der Festplatte oder einen über Proxy bereitgestellten Webdienst handelt. Es ist ratsam, die Template-Auswertung nur für Inhalte zu aktivieren, denen du vertraust, die du kontrollierst und/oder bereinigst! Eine Fehlkonfiguration kann zu Sicherheitslücken führen. Wenn beispielsweise eine über Proxy bereitgestellte App Benutzern erlaubt, Inhalte zu schreiben/zu veröffentlichen, und diese Inhalte Text enthalten, der wie Template-Aktionen aussieht, könnten beliebige Benutzer Templates auswerten und potenziell auf die Umgebung, lokale Dateien und das Netzwerk zugreifen. Aktiviere Templates nicht für nutzergenerierte Inhalte (ohne sie zu bereinigen).
+
+</aside>
+
 
 <a id="syntax"></a>
 ## Syntax

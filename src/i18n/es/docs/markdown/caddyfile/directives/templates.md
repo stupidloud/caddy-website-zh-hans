@@ -6,6 +6,12 @@ title: templates (Directiva de Caddyfile)
 
 Ejecuta el cuerpo de la respuesta como un documento de [plantilla](/docs/modules/http.handlers.templates). Las plantillas proporcionan primitivas funcionales para crear páginas dinámicas simples. Entre sus funciones están subsolicitudes HTTP, inclusión de archivos HTML, renderizado de Markdown, análisis de JSON, estructuras de datos básicas, aleatoriedad, tiempo y más.
 
+<aside class="tip">
+
+Las plantillas pueden ejecutarse sobre el cuerpo de la respuesta de *cualquier* origen, ya sea un archivo estático en disco o un servicio web tras un proxy. Sería prudente habilitar la evaluación de plantillas solo para contenido en el que confíes, que controles y/o que sanees. Una mala configuración puede provocar brechas de seguridad. Por ejemplo, si una aplicación tras un proxy permite a los usuarios escribir/publicar contenido, y ese contenido incluye texto que parece acciones de plantilla, permitiría que usuarios arbitrarios evalúen plantillas y, potencialmente, accedan al entorno, los archivos locales y la red. No habilites las plantillas sobre contenido generado por los usuarios (sin sanearlo).
+
+</aside>
+
 
 ## Sintaxis
 
