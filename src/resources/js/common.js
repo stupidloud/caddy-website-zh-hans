@@ -295,8 +295,20 @@ ready(function() {
 		indexName: 'caddyserver',
 		container: '#search',
 		transformItems: function(items) {
+			const prefix = getDocsLocalePrefix();
 			return items.map(function(item) {
 				item.url = item.url.replace('https://caddyserver.com', window.location.origin);
+				// keep search results within the current locale; the docs server
+				// falls back to English content when a translation is missing.
+				if (prefix) {
+					try {
+						const u = new URL(item.url);
+						if (u.pathname.startsWith('/docs')) {
+							u.pathname = prefix + u.pathname;
+							item.url = u.toString();
+						}
+					} catch (e) { /* leave url as-is on parse failure */ }
+				}
 				return item;
 			});
 		},

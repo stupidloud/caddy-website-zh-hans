@@ -1,0 +1,29 @@
+# fly.toml — Caddy docs site (multilingual)
+# Build uses the existing Dockerfile (FROM caddy:2-alpine).
+# Caddy listens on :{$PORT:8080}; Fly does not inject $PORT, so it falls back
+# to 8080 — which is why internal_port below is 8080. TLS is terminated at
+# Fly's edge, so Caddy serves plain HTTP internally (force_https handles redirects).
+
+app = "caddy-docs-zh"          # change to your Fly app name
+primary_region = "fra"         # central global hub (Frankfurt). alt: iad (US-East) / ams
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080         # matches the :{$PORT:8080} fallback in Caddyfile
+  force_https = true           # Fly edge does TLS; redirect HTTP -> HTTPS
+  auto_stop_machines = "off"   # keep the machine running (no idle auto-stop)
+  auto_start_machines = true   # start on incoming traffic
+  min_machines_running = 1     # always keep at least one machine up
+
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/"                 # same health path as railway.json
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
